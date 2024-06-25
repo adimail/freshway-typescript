@@ -1,0 +1,39 @@
+{
+  "cesVersion": "2.10.5",
+  "projectName": "freshway",
+  "packages": [
+    {
+      "name": "react-navigation",
+      "type": "navigation",
+      "options": {
+        "type": "stack"
+      }
+    },
+    {
+      "name": "stylesheet",
+      "type": "styling"
+    },
+    {
+      "name": "firebase",
+      "type": "authentication"
+    }
+  ],
+  "flags": {
+    "noGit": false,
+    "noInstall": false,
+    "overwrite": false,
+    "importAlias": true,
+    "packageManager": "npm",
+    "eas": true
+  },
+  "packageManager": {
+    "type": "npm",
+    "version": "10.8.1"
+  },
+  "os": {
+    "type": "Darwin",
+    "platform": "darwin",
+    "arch": "arm64",
+    "kernelVersion": "23.5.0"
+  }
+}
