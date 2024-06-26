@@ -4,6 +4,8 @@ import React from 'react';
 export default function Log({
   title,
   amount,
+  color,
+  height,
 }: {
   title: string;
   amount: string;

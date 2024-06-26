@@ -1,4 +1,4 @@
-import { colors } from 'theme';
+import { colors } from '../../../../theme';
 
 const headerTintColor = 'white';
 const fontSize = 18;

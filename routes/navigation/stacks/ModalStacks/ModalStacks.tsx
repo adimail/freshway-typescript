@@ -6,7 +6,6 @@ import Post from '../../../../scenes/post';
 import QuickAdd from '../../../../scenes/quickAdd';
 import Print from '../../../../scenes/print';
 import Month from '../../../../scenes/month';
-import Developer from '../../../../scenes/devloper';
 import InventoryMonth from '../../../../scenes/month/inventoryMonth';
 
 const Stack = createStackNavigator();
@@ -53,14 +52,6 @@ export const ModalStacks = () => {
             <Stack.Screen
               name="InventoryMonth"
               component={InventoryMonth}
-              options={{
-                title: ctx.title,
-                headerBackTitle: '',
-              }}
-            />
-            <Stack.Screen
-              name="Developer"
-              component={Developer}
               options={{
                 title: ctx.title,
                 headerBackTitle: '',

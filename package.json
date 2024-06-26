@@ -35,6 +35,7 @@
     "expo-updates": "^0.25.17",
     "firebase": "^10.12.2",
     "jotai": "^2.8.3",
+    "lottie-react-native": "^6.7.2",
     "react": "18.2.0",
     "react-native": "0.74.2",
     "react-native-dropdown-select-list": "^2.0.5",

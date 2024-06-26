@@ -39,7 +39,7 @@ export default function RootStack() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>UNAUTHORISED</Text>
-        <Image style={styles.logo} source={require('../../../../assets/icon.png')} />
+        <Image style={styles.logo} source={require('../../../assets/icon.png')} />
         <Text style={styles.toptext}>
           {userData.email} does not have access to freshway resources.
         </Text>

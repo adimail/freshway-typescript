@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
-import { colors } from 'theme';
+import { colors } from '../theme';
 import { ColorSchemeContext } from '../context/ColorSchemeContext';
 
 export default function TextInputBox(props) {

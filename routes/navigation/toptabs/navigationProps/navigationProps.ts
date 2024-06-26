@@ -1,4 +1,4 @@
-import { colors } from 'theme';
+import { colors } from '../../../../theme';
 import { Platform } from 'react-native';
 import { useContext } from 'react'; // import useContext
 import { ColorSchemeContext } from '../../../../context/ColorSchemeContext';

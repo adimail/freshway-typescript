@@ -32,7 +32,7 @@ export default function ErrorScreen() {
     <View style={styles.container}>
       <LottieView
         ref={animation}
-        source={require('../../assets/lottie/113121-error-404.json')}
+        source={require('../assets/lottie/113121-error-404.json')}
         style={styles.animation}
         autoPlay
       />
