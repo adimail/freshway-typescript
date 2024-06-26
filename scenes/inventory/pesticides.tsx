@@ -217,6 +217,7 @@ export default function PesticidesView() {
                 }}
                 height={46}
                 selectionColor={colors.darkPurple}
+                borderRadius={100}
               />
               <SelectField
                 label="Pesticide name"

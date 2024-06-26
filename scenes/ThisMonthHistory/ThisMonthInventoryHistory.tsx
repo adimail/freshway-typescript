@@ -7,15 +7,15 @@ import {
   Alert,
   TouchableOpacity,
   Vibration,
+  StyleSheet,
 } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
 
 import { UserDataContext } from '../../context/UserDataContext';
 import CustomSwitch from '../../components/toggleSwitch';
-import { styles } from './styles';
 import { firestore } from '../../firebase/config';
 import { collection, getDocs, writeBatch, doc, getDoc } from 'firebase/firestore';
-import { colors } from '../../theme';
+import { colors, fontSize } from '../../theme';
 import { showToast } from '../../utils/ShowToast';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { monthYear } from '../inventory/utils';
@@ -152,6 +152,7 @@ const ThisMonthInventoryHistory = () => {
       await batch.commit().then(() => {
         showToast({
           title: 'Log Deleted',
+          body: 'Data refreshed',
         });
         setRefreshTrigger((prev) => prev + 1);
       });
@@ -202,6 +203,8 @@ const ThisMonthInventoryHistory = () => {
             options={['All', 'Seeds', 'Pesticides', 'Fertilizers']}
             onSelectSwitch={onSelectSwitch}
             selectionColor="#1C2833"
+            height={38}
+            borderRadius={100}
           />
         </View>
         <View style={styles.content}>
@@ -229,7 +232,16 @@ const ThisMonthInventoryHistory = () => {
             ) : (
               <ScrollView
                 horizontal
-                contentContainerStyle={[styles.scrollViewContainer, { marginBottom: 50 }]}
+                contentContainerStyle={[
+                  {
+                    marginBottom: 50,
+                    alignItems: 'center',
+                    paddingHorizontal: 20,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginVertical: 18,
+                  },
+                ]}
                 showsVerticalScrollIndicator>
                 <View
                   style={{
@@ -367,5 +379,142 @@ const DateText = ({ date, format, displayFormat }) => {
   );
   return <Text>{formattedDate}</Text>;
 };
+
+const styles = StyleSheet.create({
+  field: {
+    fontSize: fontSize.middle,
+    textAlign: 'center',
+  },
+  logBook: {
+    width: '100%',
+    maxWidth: 1000,
+    alignItems: 'center',
+    alignSelf: 'center',
+    display: 'flex',
+    gap: 9,
+    marginBottom: 100,
+  },
+  amount: {
+    fontSize: 20,
+    color: 'white',
+  },
+  title: {
+    color: 'white',
+    fontSize: 18,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    maxWidth: '75%',
+  },
+  date: {
+    color: 'white',
+    fontSize: 11,
+  },
+  log: {
+    display: 'flex',
+    paddingVertical: 9,
+    paddingHorizontal: 20,
+    width: '100%',
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  switchContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+  },
+  separator: {
+    marginVertical: 20,
+    marginBottom: 30,
+    height: 1,
+    width: '90%',
+    alignSelf: 'center',
+    backgroundColor: colors.white,
+  },
+  column: {
+    width: '75%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  scrollViewContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: 18,
+  },
+  table: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#1C2833',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#f2f2f2',
+  },
+  tableCell: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    textAlign: 'center',
+    color: '#333',
+  },
+  tableHeaderCell: {
+    flex: 1,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+  },
+  col1: {
+    paddingHorizontal: 5,
+    width: 180,
+    color: 'white',
+  },
+  col2: {
+    marginHorizontal: 7,
+    width: 100,
+    color: 'white',
+  },
+  col3: {
+    marginHorizontal: 7,
+    width: 80,
+    color: 'white',
+  },
+  col4: {
+    marginHorizontal: 7,
+    width: 70,
+    color: 'white',
+  },
+  col5: {
+    marginHorizontal: 7,
+    width: 80,
+    color: 'white',
+  },
+  col6: {
+    marginHorizontal: 7,
+    width: 30,
+    color: 'white',
+  },
+});
 
 export default ThisMonthInventoryHistory;

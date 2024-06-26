@@ -246,6 +246,8 @@ export default function Home() {
                 setType(value);
               }}
               selectionColor="#1C2833"
+              height={38}
+              borderRadius={100}
             />
           </View>
 

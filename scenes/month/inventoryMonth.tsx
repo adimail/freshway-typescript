@@ -102,6 +102,8 @@ export default function InventoryMonth({ route }) {
             options={['All', 'Seeds', 'Pesticides', 'Fertilizers']}
             onSelectSwitch={onSelectSwitch}
             selectionColor="#1C2833"
+            height={38}
+            borderRadius={10}
           />
         </View>
         <View style={styles.content}>

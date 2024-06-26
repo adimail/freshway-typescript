@@ -16,7 +16,7 @@ const lightProps = {
 const darkProps = {
   headerTintColor,
   headerStyle: {
-    backgroundColor: colors.dark,
+    backgroundColor: colors.darkInput,
   },
   headerTitleStyle: { fontSize },
   headerMode,

@@ -1,10 +1,8 @@
 import React from 'react';
-import {
-  createBottomTabNavigator,
-  BottomTabNavigationOptions,
-} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import { colors } from '../../../theme';
+
 import {
   HomeNavigator,
   ProfileNavigator,
@@ -16,21 +14,6 @@ import {
 const Tab = createBottomTabNavigator();
 
 const TabNavigator: React.FC = () => {
-  const tabBarOptions: BottomTabNavigationOptions = {
-    tabBarLabelPosition: 'beside-icon',
-    tabBarLabelStyle: { fontSize: 12 }, // Example of adding style
-    tabBarIconStyle: { marginBottom: -3 }, // Example of adding style
-    tabBarStyle: {
-      backgroundColor: 'white',
-      borderTopColor: 'gray',
-      borderTopWidth: 1,
-      paddingBottom: 5,
-      paddingTop: 5,
-    },
-    tabBarActiveTintColor: colors.lightPurple,
-    tabBarInactiveTintColor: colors.gray,
-  };
-
   const tabScreens = [
     {
       name: 'HomeTab',
@@ -70,10 +53,26 @@ const TabNavigator: React.FC = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="HomeTab"
-      screenOptions={{
+      options={{
+        tabBarStyle: {
+          backgroundColor: 'white',
+          borderTopColor: 'gray',
+          borderTopWidth: 1,
+          paddingBottom: 5,
+          paddingTop: 5,
+        },
+      }}
+      defaultScreenOptions={{
         headerShown: false,
-      }}>
+        headerTransparent: true,
+      }}
+      screenOptions={() => ({
+        headerShown: false,
+        tabBarActiveTintColor: colors.lightPurple,
+        tabBarInactiveTintColor: colors.gray,
+      })}
+      initialRouteName="HomeTab"
+      swipeEnabled={false}>
       {tabScreens.map((screen) => (
         <Tab.Screen
           key={screen.name}

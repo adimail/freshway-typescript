@@ -7,11 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function AllTimeHistory() {
   const { userData } = useContext(UserDataContext)!;
+  const isDark = true;
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
   const [monthsSinceJoined, setMonthsSinceJoined] = useState([]);
-  const joinedDate = userData.joined;
+  const joinedDate = userData.joined.toDate();
   const currentDate = new Date();
 
   const navigatetomonth = (monthName) => {
@@ -57,7 +58,7 @@ export default function AllTimeHistory() {
         showsVerticalScrollIndicator={false}
         style={[styles.main, { paddingTop: 20 }]}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <Text style={[styles.header, { color: 'white' }]}>All time history</Text>
+        <Text style={[styles.header, { color: isDark ? 'white' : 'black' }]}>All time history</Text>
         <View>
           <View style={styles.history}>
             {monthsSinceJoined.map((month, index) => (

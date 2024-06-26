@@ -271,6 +271,7 @@ export default function FertilizersView() {
                     }}
                     height={46}
                     selectionColor="#1C2833"
+                    borderRadius={100}
                   />
                 </View>
               </View>

@@ -14,9 +14,13 @@ export const HomeNavigator = () => {
 
   return (
     <HomeTitleContext.Provider value={contextValue}>
-      <Stack.Navigator>
-        <Stack.Screen name="Freshway" component={Home} />
-      </Stack.Navigator>
+      <HomeTitleContext.Consumer>
+        {() => (
+          <Stack.Navigator>
+            <Stack.Screen name="Freshway" component={Home} />
+          </Stack.Navigator>
+        )}
+      </HomeTitleContext.Consumer>
     </HomeTitleContext.Provider>
   );
 };

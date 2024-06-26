@@ -4,7 +4,6 @@ import { HomeTitleContext } from '../../../../context/HomeTitleContext';
 
 import Post from '../../../../scenes/post';
 import QuickAdd from '../../../../scenes/quickAdd';
-import Print from '../../../../scenes/print';
 import Month from '../../../../scenes/month';
 import InventoryMonth from '../../../../scenes/month/inventoryMonth';
 
@@ -25,16 +24,16 @@ export const ModalStacks = () => {
               headerShown: true,
             }}>
             <Stack.Screen
-              name="Post"
-              component={Post}
+              name="QuickAdd"
+              component={QuickAdd}
               options={{
                 title: ctx.title,
                 headerBackTitle: '',
               }}
             />
             <Stack.Screen
-              name="QuickAdd"
-              component={QuickAdd}
+              name="Post"
+              component={Post}
               options={{
                 title: ctx.title,
                 headerBackTitle: '',
@@ -56,7 +55,6 @@ export const ModalStacks = () => {
                 headerBackTitle: '',
               }}
             />
-            <Stack.Screen name="Print" component={Print} />
           </Stack.Navigator>
         )}
       </HomeTitleContext.Consumer>
