@@ -1,0 +1,143 @@
+import { StyleSheet } from 'react-native';
+import { fontSize, colors } from '../../theme';
+
+export const useStyles = (isDark: boolean) =>
+  StyleSheet.create({
+    main: {
+      flex: 1,
+      width: '100%',
+    },
+    Name: {
+      fontSize: fontSize.xxxLarge,
+      textAlign: 'center',
+      marginTop: 20,
+      borderRadius: 50,
+    },
+    text: {
+      fontSize: fontSize.large,
+      marginBottom: 10,
+      textAlign: 'center',
+    },
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 0,
+      paddingTop: 10,
+    },
+    input: {
+      height: 46,
+      borderColor: isDark ? colors.darkInput : '#BABABA',
+      borderRadius: 10,
+      backgroundColor: '#F2F3F4',
+      width: 300,
+      borderWidth: 1,
+      paddingHorizontal: 10,
+      color: isDark ? colors.lightyellow : colors.darkInput,
+    },
+    inlineInput: {
+      height: 46,
+      borderColor: '#BABABA',
+      borderRadius: 10,
+      width: '50%',
+      paddingLeft: 3,
+      color: isDark ? colors.lightyellow : colors.darkInput,
+    },
+    button: {
+      height: 35,
+      backgroundColor: '#408c57',
+      borderRadius: 10,
+      paddingHorizontal: 10,
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+      alignContent: 'center',
+    },
+    buttonText: {
+      color: isDark ? colors.darkInput : 'white',
+      borderColor: '#BABABA',
+      fontSize: 16,
+    },
+    inline: {
+      display: 'flex',
+      flexDirection: 'row',
+      width: 250,
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      paddingBottom: 6.8,
+      paddingTop: 5,
+    },
+    separator: {
+      marginVertical: 5,
+      height: 1,
+      backgroundColor: 'black',
+      width: '80%',
+      alignSelf: 'center',
+    },
+    top: {
+      backgroundColor: colors.lightPurple,
+      borderBottomLeftRadius: 60,
+      borderBottomRightRadius: 60,
+      width: '100%',
+      alignSelf: 'center',
+      marginBottom: 50,
+    },
+    selectlistDropdown: {
+      backgroundColor: '#1c2833ba',
+      height: 130,
+    },
+    selectlistBoxStyles: {
+      height: 45,
+      borderColor: isDark ? colors.darkInput : '#BABABA',
+      borderRadius: 10,
+      backgroundColor: '#F2F3F4',
+      width: 300,
+      borderWidth: 1,
+      paddingHorizontal: 10,
+      color: isDark ? colors.lightyellow : colors.darkInput,
+    },
+    dateButton: {
+      borderWidth: 1,
+      borderColor: '#B0BEC5',
+      borderRadius: 4,
+      padding: 8,
+      marginBottom: 16,
+      alignItems: 'center',
+      backgroundColor: 'white',
+    },
+    summaryContainer: {
+      margin: 20,
+      padding: 10,
+      borderRadius: 10,
+    },
+    summaryTitle: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: colors.lightPurple,
+      marginBottom: 30,
+      textAlign: 'center',
+    },
+    summarySection: {
+      marginBottom: 15,
+    },
+    summarySectionTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: isDark ? colors.darkInput : colors.tertiary,
+      marginBottom: 5,
+    },
+    summaryTable: {
+      width: '100%',
+    },
+    summaryRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      borderBottomColor: colors.grayLight,
+      paddingVertical: 5,
+    },
+    summaryCell: {
+      fontSize: 16,
+      color: isDark ? colors.lightyellow : colors.darkPurple,
+    },
+  });

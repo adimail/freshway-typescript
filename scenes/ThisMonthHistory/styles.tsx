@@ -1,0 +1,137 @@
+import { fontSize } from '../../theme';
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  field: {
+    fontSize: fontSize.middle,
+    textAlign: 'center',
+  },
+  logBook: {
+    width: '100%',
+    maxWidth: 1000,
+    alignItems: 'center',
+    alignSelf: 'center',
+    display: 'flex',
+    gap: 9,
+    marginBottom: 100,
+  },
+  amount: {
+    fontSize: 20,
+    color: 'white',
+  },
+  title: {
+    color: 'white',
+    fontSize: 18,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    maxWidth: '75%',
+  },
+  date: {
+    color: 'white',
+    fontSize: 11,
+  },
+  log: {
+    display: 'flex',
+    paddingVertical: 9,
+    paddingHorizontal: 20,
+    width: '100%',
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  switchContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+  },
+  separator: {
+    marginVertical: 20,
+    marginBottom: 30,
+    height: 1,
+    width: '90%',
+    alignSelf: 'center',
+  },
+  column: {
+    width: '75%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  scrollViewContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  table: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#1C2833',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#f2f2f2',
+  },
+  tableCell: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    textAlign: 'center',
+    color: '#333',
+  },
+  tableHeaderCell: {
+    flex: 1,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+  },
+  col1: {
+    paddingHorizontal: 5,
+    width: 180,
+    color: 'white',
+  },
+  col2: {
+    marginHorizontal: 7,
+    width: 100,
+    color: 'white',
+  },
+  col3: {
+    marginHorizontal: 7,
+    width: 80,
+    color: 'white',
+  },
+  col4: {
+    marginHorizontal: 7,
+    width: 70,
+    color: 'white',
+  },
+  col5: {
+    marginHorizontal: 7,
+    width: 80,
+    color: 'white',
+  },
+  col6: {
+    marginHorizontal: 7,
+    width: 30,
+    color: 'white',
+  },
+});
