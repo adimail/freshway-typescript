@@ -1,7 +1,12 @@
 /* eslint-disable import/prefer-default-export */
-import { createContext } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
 
-export const HomeTitleContext = createContext({
+interface HomeTitleContextType {
+  title: string;
+  setTitle: Dispatch<SetStateAction<string>>;
+}
+
+export const HomeTitleContext = createContext<HomeTitleContextType>({
   title: 'default title',
   setTitle: () => {},
 });

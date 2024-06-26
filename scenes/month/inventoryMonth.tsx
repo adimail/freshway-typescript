@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { Text, View, ScrollView, RefreshControl } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { colors } from '../../theme';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import CustomSwitch from '../../components/toggleSwitch';
 import { collection, getDocs } from 'firebase/firestore';
 import { firestore } from '../../firebase/config';
@@ -13,8 +13,8 @@ import { NetSummaryComponent } from '../inventory/summary';
 
 export default function InventoryMonth({ route }) {
   const { month, userData } = route.params;
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+
+  const isDark = true;
   const { setTitle } = useContext(HomeTitleContext);
 
   useFocusEffect(() => {
@@ -98,7 +98,6 @@ export default function InventoryMonth({ route }) {
             alignSelf: 'center',
           }}>
           <CustomSwitch
-            selectionMode={1}
             roundCorner
             options={['All', 'Seeds', 'Pesticides', 'Fertilizers']}
             onSelectSwitch={onSelectSwitch}

@@ -8,7 +8,12 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
-  extends: ['airbnb', 'universe/native'],
+  extends: [
+    'airbnb',
+    'universe/native',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+  ],
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',

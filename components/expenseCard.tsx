@@ -2,19 +2,10 @@ import { StyleSheet, View, Text } from 'react-native';
 import React from 'react';
 import { colors } from '../theme';
 
-export default function Card({
-  title,
-  amount,
-  navigate,
-}: {
-  title: string;
-  amount: string;
-  navigate: string;
-}) {
+export default function Card({ title, amount }: { title: string; amount: number }) {
   const dynamicCardStyles = {
     ...styles.card,
     height: styles.card.height,
-    navigate: navigate || 'home',
   };
 
   return (

@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { ColorSchemeContext } from '../context/ColorSchemeContext';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import IconButton from '../components/IconButton';
 import { colors } from '../theme';
@@ -11,8 +10,7 @@ import { deleteQuickAdd } from './deletequickadd';
 import { showToast } from './ShowToast';
 
 const QuickAddComponent = ({ data, userData, setCurrentMonthExpense, NavigateToQuickAdd }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
 
   const handleAddLog = (title, amount, category, description) => {
     const type = 'Sell';
@@ -95,8 +93,7 @@ const QuickAddComponent = ({ data, userData, setCurrentMonthExpense, NavigateToQ
 };
 
 const QuickAddItem = ({ title, amounts, category, userData, handleAddLog, deleteQuickAdd }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
   const description = 'Quick add item';
 
   const [selectedAmountIndex, setSelectedAmountIndex] = useState(0);

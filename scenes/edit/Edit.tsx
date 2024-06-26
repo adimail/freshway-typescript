@@ -14,13 +14,11 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useNavigation } from '@react-navigation/native';
 import { colors, fontSize } from '../../theme';
 import { UserDataContext } from '../../context/UserDataContext';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { showToast } from '../../utils/ShowToast';
 
 export default function Edit() {
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
+  const { userData } = useContext(UserDataContext)!;
   const navigation = useNavigation();
   const [fullName, setFullName] = useState(userData.fullName);
   const [progress, setProgress] = useState('');
@@ -29,10 +27,9 @@ export default function Edit() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [spinner, setSpinner] = useState(false);
-  const isDark = scheme === 'dark';
   const colorScheme = {
-    text: isDark ? colors.white : colors.primaryText,
-    progress: isDark ? styles.darkprogress : styles.progress,
+    text: colors.white,
+    progress: styles.darkprogress,
   };
 
   const ImageChoiceAndUpload = async () => {
@@ -118,7 +115,6 @@ export default function Edit() {
       showToast({
         title: 'Password changed',
         body: 'Your password has changed.',
-        isDark,
       });
       setCurrentPassword('');
       setPassword('');

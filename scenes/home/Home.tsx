@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, { useEffect, useState, useContext, useLayoutEffect } from 'react';
 import {
   Text,
@@ -18,7 +19,6 @@ import { colors, fontSize } from '../../theme';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { firestore } from '../../firebase/config';
 import { UserDataContext } from '../../context/UserDataContext';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 import { showToast } from '../../utils/ShowToast';
 import { submitData } from '../../utils/SubmitUserData';
 import Card from '../../components/expenseCard';
@@ -28,10 +28,7 @@ import { NetSummaryComponent } from '../inventory/summary';
 
 export default function Home() {
   const navigation = useNavigation();
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
-
+  const { userData } = useContext(UserDataContext)!;
   const [refreshing, setRefreshing] = useState(false);
 
   // expense categories
@@ -41,7 +38,7 @@ export default function Home() {
   // Account Information
   const [name, setName] = useState('Customer');
   const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState(null);
+  const [amount, setAmount] = useState(0);
   const [date, setDate] = useState(new Date());
   const [type, setType] = useState('Sell');
   const [category, setCategory] = useState('');
@@ -54,12 +51,12 @@ export default function Home() {
 
   const QuickAddData = userData && userData.quickadd;
 
-  const fetchSummaryData = async () => {
-    const MonthYear = new Date().toLocaleDateString('en-GB', {
-      month: 'short',
-      year: 'numeric',
-    });
+  const MonthYear = new Date().toLocaleDateString('en-GB', {
+    month: 'short',
+    year: 'numeric',
+  });
 
+  const fetchSummaryData = async () => {
     const expenseSummaryRef = doc(
       firestore,
       `summaries-${userData.id}`,
@@ -111,7 +108,7 @@ export default function Home() {
     fetchSummaryData();
   }, []);
 
-  const handleDateChange = (event, selectedDate) => {
+  const handleDateChange = (selectedDate: Date) => {
     setShowDatePicker(false);
     if (selectedDate) {
       setDate(selectedDate);
@@ -120,7 +117,7 @@ export default function Home() {
 
   const renderDatePicker = () => {
     // Get the start of the month when the user joined
-    const joinedDate = userData.joined.toDate();
+    const joinedDate = userData.joined;
 
     const startOfMonth = new Date(joinedDate.getFullYear(), joinedDate.getMonth(), 1);
 
@@ -138,14 +135,14 @@ export default function Home() {
     );
   };
 
-  const NavigateToCategories = () => {
-    navigation.navigate('ModalStacks', {
-      screen: 'Post',
-      params: {
-        data: userData,
-        from: 'Home screen',
-      },
-    });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const NavigateToCategories = (navigation: any) => {
+    navigation.navigate('ModalStacks');
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const NavigateToQuickAdd = (navigation: any) => {
+    navigation.navigate('ModalStacks');
   };
 
   useLayoutEffect(() => {
@@ -155,23 +152,13 @@ export default function Home() {
           <FontAwesome
             name="folder-open"
             size={27}
-            onPress={() => NavigateToCategories()}
+            onPress={() => NavigateToCategories(navigation)}
             color={colors.lightPurple}
           />
         </View>
       ),
     });
   }, [navigation]);
-
-  const NavigateToQuickAdd = () => {
-    navigation.navigate('ModalStacks', {
-      screen: 'QuickAdd',
-      params: {
-        data: userData,
-        from: 'Home screen',
-      },
-    });
-  };
 
   const HandleSubmitData = () => {
     // Check if all fields are filled
@@ -204,7 +191,6 @@ export default function Home() {
         showToast({
           title: 'Log Added',
           body: name,
-          isDark,
         });
 
         setAmount('');
@@ -256,10 +242,9 @@ export default function Home() {
               alignSelf: 'center',
             }}>
             <CustomSwitch
-              selectionMode={1}
               roundCorner
               options={['Sell', 'Credit']}
-              onSelectSwitch={(value) => {
+              onSelectSwitch={(value: string) => {
                 setType(value);
               }}
               selectionColor="#1C2833"
@@ -291,7 +276,7 @@ export default function Home() {
               }}
               dropdownTextStyles={{ fontSize: 14, color: 'white' }}
               dropdownStyles={{ backgroundColor: '#1c2833ba' }}
-              setSelected={(value) => {
+              setSelected={(value: string) => {
                 setCategory(value);
               }}
               search={false}
@@ -304,7 +289,6 @@ export default function Home() {
               style={[styles.input]}
               placeholder="Enter Amount"
               keyboardType="numeric"
-              value={amount}
               onChangeText={(text) => setAmount(text)}
             />
 
@@ -340,17 +324,17 @@ export default function Home() {
             {showDatePicker && renderDatePicker()}
           </View>
         </View>
-        <Text style={[styles.Name, { color: isDark ? 'white' : 'black' }]}>Quick Add</Text>
+        <Text style={[styles.Name, { color: 'white' }]}>Quick Add</Text>
         <QuickAddComponent
           data={QuickAddData}
           userData={userData}
           setCurrentMonthExpense={setCurrentMonthExpense}
-          NavigateToQuickAdd={NavigateToQuickAdd}
+          NavigateToQuickAdd={NavigateToQuickAdd(navigation)}
         />
 
         <View style={[styles.separator, { marginVertical: 30 }]} />
 
-        <NetSummaryComponent refreshTrigger={refreshTrigger} />
+        <NetSummaryComponent refreshTrigger={refreshTrigger} time={MonthYear} />
       </ScrollView>
     </ScreenTemplate>
   );

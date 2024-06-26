@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, ScrollView, Linking } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import Button from '../../components/Button';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import { UserDataContext } from '../../context/UserDataContext';
 import { useNavigation } from '@react-navigation/native';
 import { colors, fontSize } from '../../theme';
@@ -15,13 +15,18 @@ import Logo from '../../components/Logo';
 import { NetSummaryComponent } from '../inventory/summary';
 
 export default function Profile() {
-  const { userData } = useContext(UserDataContext);
+  const { userData } = useContext(UserDataContext)!;
   const navigation = useNavigation();
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+
+  const isDark = true;
   const colorScheme = {
     text: isDark ? colors.white : colors.primaryText,
   };
+
+  const monthYear = new Date().toLocaleDateString('en-GB', {
+    month: 'short',
+    year: 'numeric',
+  });
 
   const joinedDate = userData.joined.toDate();
 
@@ -68,7 +73,7 @@ export default function Profile() {
             <Button label="Edit Profile" color={colors.primary} onPress={goDetail} />
             <Button label="Sign out" color={colors.secondary} onPress={onSignOutPress} />
           </View>
-          <NetSummaryComponent />
+          <NetSummaryComponent refreshTrigger={1} time={monthYear} />
           <Logo />
           <Text
             style={[

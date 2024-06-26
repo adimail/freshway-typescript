@@ -1,7 +1,5 @@
 import { colors } from '../../../../theme';
 import { Platform } from 'react-native';
-import { useContext } from 'react'; // import useContext
-import { ColorSchemeContext } from '../../../../context/ColorSchemeContext';
 
 const labelSize = Platform.select({
   ios: 14,
@@ -9,10 +7,7 @@ const labelSize = Platform.select({
 });
 
 const screenOptions = () => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
-
-  const activeTintColor = isDark ? colors.white : 'black';
+  const activeTintColor = colors.white;
 
   return {
     tabBarLabelStyle: {

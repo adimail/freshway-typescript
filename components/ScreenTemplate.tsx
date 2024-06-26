@@ -1,23 +1,20 @@
-import React, { useContext } from 'react'
-import { StyleSheet, SafeAreaView } from 'react-native'
-import { colors } from '../theme'
-import { StatusBar } from 'expo-status-bar'
-import { ColorSchemeContext } from '../context/ColorSchemeContext'
-import LoadingScreen from './LoadingScreen'
-import ErrorScreen from './ErrorScreen'
+import React, { useContext } from 'react';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import { colors } from '../theme';
+import { StatusBar } from 'expo-status-bar';
+import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 export default function ScreenTemplate(props) {
-  const { isLoading, isError } = props
-  const { scheme } = useContext(ColorSchemeContext)
-  const isDark = scheme === 'dark'
-  const container = isDark ? styles.darkContainer : styles.container
+  const { isLoading, isError } = props;
+  const container = styles.darkContainer;
 
   if (isLoading) {
-    return <LoadingScreen />
+    return <LoadingScreen />;
   }
 
   if (isError) {
-    return <ErrorScreen />
+    return <ErrorScreen />;
   }
 
   return (
@@ -25,15 +22,12 @@ export default function ScreenTemplate(props) {
       <StatusBar />
       {props?.children}
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   darkContainer: {
     flex: 1,
     backgroundColor: colors.black,
   },
-})
+});

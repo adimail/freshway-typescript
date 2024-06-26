@@ -1,65 +1,53 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { setDoc, doc } from 'firebase/firestore'
-import Spinner from 'react-native-loading-spinner-overlay'
-import { useNavigation } from '@react-navigation/native'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import ScreenTemplate from '../../components/ScreenTemplate'
-import TextInputBox from '../../components/TextInputBox'
-import Button from '../../components/Button'
-import Logo from '../../components/Logo'
-import { firestore, auth } from '../../firebase/config'
-import { colors, fontSize } from '../../theme'
-import { ColorSchemeContext } from '../../context/ColorSchemeContext'
-import { defaultAvatar } from '../../config'
+import React, { useState, useContext, useEffect } from 'react';
+import { Text, StyleSheet, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { setDoc, doc } from 'firebase/firestore';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { useNavigation } from '@react-navigation/native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import ScreenTemplate from '../../components/ScreenTemplate';
+import TextInputBox from '../../components/TextInputBox';
+import Button from '../../components/Button';
+import Logo from '../../components/Logo';
+import { firestore, auth } from '../../firebase/config';
+import { colors, fontSize } from '../../theme';
+import { defaultAvatar } from '../../config';
 
 export default function Registration() {
-  const [fullName, setFullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [spinner, setSpinner] = useState(false)
-  const navigation = useNavigation()
-  const { scheme } = useContext(ColorSchemeContext)
-  const isDark = scheme === 'dark'
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [spinner, setSpinner] = useState(false);
+  const navigation = useNavigation();
+  const isDark = true;
   const colorScheme = {
     text: isDark ? colors.white : colors.primaryText,
-  }
+  };
 
   useEffect(() => {
-    console.log('Registration screen')
-  }, [])
+    console.log('Registration screen');
+  }, []);
 
   const onFooterLinkPress = () => {
-    navigation.navigate('Login')
-  }
+    navigation.navigate('Login');
+  };
 
   const onRegisterPress = async () => {
     if (password !== confirmPassword) {
-      alert("Passwords don't match.")
-      return
+      alert("Passwords don't match.");
+      return;
     }
     try {
-      setSpinner(true)
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      )
-      const uid = response?.user.uid
+      setSpinner(true);
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = response?.user.uid;
       const data = {
         id: uid,
         email,
         fullName,
         avatar: defaultAvatar,
-        Sell: [
-          'Seeds',
-          'Fungicides',
-          'Insecticides',
-          'Weedicides',
-          'Fertilizers',
-        ],
+        Sell: ['Seeds', 'Fungicides', 'Insecticides', 'Weedicides', 'Fertilizers'],
         Credit: ['Seeds', 'Pesticides', 'Fertilizers'],
         quickadd: [
           {
@@ -84,22 +72,21 @@ export default function Registration() {
             company: ['Company 1', 'Company 2'],
           },
         },
-      }
+      };
 
-      const usersRef = doc(firestore, 'users', uid)
-      await setDoc(usersRef, data)
+      const usersRef = doc(firestore, 'users', uid);
+      await setDoc(usersRef, data);
     } catch (e) {
-      setSpinner(false)
-      alert(e)
+      setSpinner(false);
+      alert(e);
     }
-  }
+  };
 
   return (
     <ScreenTemplate>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         <View style={styles.main}>
           <Logo />
           <View style={styles.input}>
@@ -152,7 +139,7 @@ export default function Registration() {
         overlayColor="rgba(0,0,0,0.5)"
       />
     </ScreenTemplate>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -183,4 +170,4 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 500,
   },
-})
+});

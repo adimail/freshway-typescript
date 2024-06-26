@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, LogBox } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { doc, getDoc } from 'firebase/firestore';
@@ -10,7 +10,6 @@ import Button from '../../components/Button';
 import TextInputBox from '../../components/TextInputBox';
 import Logo from '../../components/Logo';
 import { colors, fontSize } from '../../theme';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 import { auth, firestore } from '../../firebase/config';
 
 // To ignore a useless warning in terminal.
@@ -22,13 +21,12 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [spinner, setSpinner] = useState(false);
   const navigation = useNavigation();
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
   const colorScheme = {
-    text: isDark ? colors.white : colors.primaryText,
+    text: colors.white,
   };
 
-  const onFooterLinkPress = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onFooterLinkPress = (navigation: any) => {
     navigation.navigate('Registration');
   };
 
@@ -42,7 +40,6 @@ export default function Login() {
       if (!firestoreDocument.exists) {
         setSpinner(false);
         alert('User does not exist anymore.');
-        return;
       }
     } catch (error) {
       setSpinner(false);
@@ -60,7 +57,7 @@ export default function Login() {
           <View style={styles.input}>
             <TextInputBox
               placeholder="E-mail"
-              onChangeText={(text) => setEmail(text)}
+              onChangeText={(text: string) => setEmail(text)}
               autoCapitalize="none"
               value={email}
               keyboardType="email-address"
@@ -68,7 +65,7 @@ export default function Login() {
             <TextInputBox
               secureTextEntry
               placeholder="Password"
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text: string) => setPassword(text)}
               value={password}
               autoCapitalize="none"
             />
@@ -77,7 +74,7 @@ export default function Login() {
           <View style={styles.footerView}>
             <Text style={[styles.footerText, { color: colorScheme.text }]}>
               Don&apos;t have an account?{' '}
-              <Text onPress={onFooterLinkPress} style={styles.footerLink}>
+              <Text onPress={() => onFooterLinkPress(navigation)} style={styles.footerLink}>
                 Sign up
               </Text>
             </Text>
@@ -100,7 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: colors.background,
+    backgroundColor: colors.darkInput,
   },
   footerView: {
     flex: 1,
@@ -120,15 +117,8 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     marginVertical: 20,
   },
-  developerInfoContainer: {
-    padding: 20,
-    backgroundColor: colors.lightBackground,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 20,
-  },
   developerInfoTitle: {
-    fontSize: fontSize.xlarge,
+    fontSize: fontSize.xLarge,
     fontWeight: 'bold',
     color: colors.blueLight,
     marginBottom: 10,

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Text, View, TextInput, StyleSheet, Alert, ScrollView } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import { HomeTitleContext } from '../../context/HomeTitleContext';
 import { UserDataContext } from '../../context/UserDataContext';
 import { colors } from '../../theme';
@@ -15,9 +15,9 @@ import Button from '../../components/Button';
 export default function QuickAdd() {
   const navigation = useNavigation();
   const { setTitle } = useContext(HomeTitleContext);
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { userData } = useContext(UserDataContext)!;
+
+  const isDark = true;
 
   const SellData = userData && userData.Sell;
 

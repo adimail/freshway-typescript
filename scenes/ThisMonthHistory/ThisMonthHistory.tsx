@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useState, useMemo } from 'react';
 import {
   Text,
   View,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   Alert,
@@ -10,21 +9,19 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
-import { colors, fontSize } from '../../theme';
+import { colors } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
 import ScreenTemplate from '../../components/ScreenTemplate';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 import { UserDataContext } from '../../context/UserDataContext';
 import CustomSwitch from '../../components/toggleSwitch';
 import { firestore } from '../../firebase/config';
 import Card from '../../components/expenseCard';
 import { showToast } from '../../utils/ShowToast';
+import { styles } from './styles';
 
 export default function ThisMonthHistory() {
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { userData } = useContext(UserDataContext)!;
   const [type, setType] = useState('Sell');
   const [expenseData, setExpenseData] = useState(null);
   const [CreditData, setCreditData] = useState(null);
@@ -138,7 +135,6 @@ export default function ThisMonthHistory() {
       showToast({
         title: 'Data refreshed',
         body: `Last Updated: ${formattedDate} ${formattedTime}`,
-        isDark,
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -196,7 +192,7 @@ export default function ThisMonthHistory() {
 
       showToast({
         title: 'Log Deleted',
-        isDark,
+        body: 'Data refreshed',
       });
 
       fetchDataForCurrentMonth();
@@ -299,11 +295,12 @@ export default function ThisMonthHistory() {
             alignSelf: 'center',
           }}>
           <CustomSwitch
-            selectionMode={1}
             roundCorner
             options={['Sell', 'Credit']}
             onSelectSwitch={onSelectSwitch}
             selectionColor="#1C2833"
+            height={38}
+            borderRadius={10}
           />
         </View>
 
@@ -312,16 +309,9 @@ export default function ThisMonthHistory() {
           amount={type === 'Credit' ? totalCredit : totalExpense}
         />
 
-        <View style={styles.content}>
+        <View>
           <View style={{ width: '100%', alignItems: 'center' }}>
-            <View
-              style={[
-                styles.separator,
-                {
-                  backgroundColor: isDark ? 'white' : 'black',
-                },
-              ]}
-            />
+            <View style={[styles.separator]} />
 
             <View
               style={{
@@ -352,16 +342,13 @@ export default function ThisMonthHistory() {
               </View>
             </View>
 
-            <Text style={{ color: isDark ? 'white' : 'black' }}>
-              Filter by Date, Costs and categories of logs
-            </Text>
+            <Text style={{ color: 'white' }}>Filter by Date, Costs and categories of logs</Text>
 
             <ScrollView
               horizontal
               contentContainerStyle={styles.scrollViewContainer}
               showsVerticalScrollIndicator={false}>
               <CustomSwitch
-                selectionMode={1}
                 roundCorner
                 options={['Date', 'Amount']}
                 onSelectSwitch={onSelectFilter}
@@ -370,7 +357,6 @@ export default function ThisMonthHistory() {
                 borderRadius={10}
               />
               <CustomSwitch
-                selectionMode={1}
                 roundCorner
                 options={type === 'Credit' ? CreditCategories : expenseCategories}
                 onSelectSwitch={onSelectCategoryFilter}
@@ -382,23 +368,19 @@ export default function ThisMonthHistory() {
 
             <View style={styles.logBook}>
               {isLoading ? ( // Check if loading
-                <Text style={[styles.title, { color: isDark ? 'white' : 'black' }]}>
-                  Fetching data from cloud ☁️
-                </Text>
+                <Text style={[styles.title, { color: 'white' }]}>Fetching data from cloud ☁️</Text>
               ) : (
                 dataToDisplay && (
-                  <>
+                  <View>
                     {dataToDisplay.length === 0 ? (
-                      <Text style={[styles.title, { color: isDark ? 'white' : 'black' }]}>
-                        No data to display
-                      </Text>
+                      <Text style={[styles.title, { color: 'white' }]}>No data to display</Text>
                     ) : (
                       dataToDisplay.map((log) => (
                         <TouchableOpacity
                           style={[
                             styles.log,
                             {
-                              backgroundColor: isDark ? colors.primaryText : colors.primary,
+                              backgroundColor: colors.primaryText,
                             },
                           ]}
                           key={log.id}
@@ -424,7 +406,7 @@ export default function ThisMonthHistory() {
                         </TouchableOpacity>
                       ))
                     )}
-                  </>
+                  </View>
                 )
               )}
             </View>
@@ -434,74 +416,3 @@ export default function ThisMonthHistory() {
     </ScreenTemplate>
   );
 }
-
-const styles = StyleSheet.create({
-  field: {
-    fontSize: fontSize.middle,
-    textAlign: 'center',
-  },
-  logBook: {
-    width: '100%',
-    maxWidth: 1000,
-    alignItems: 'center',
-    alignSelf: 'center',
-    display: 'flex',
-    gap: 9,
-    marginBottom: 100,
-  },
-  amount: {
-    fontSize: 20,
-    color: 'white',
-  },
-  title: {
-    color: 'white',
-    fontSize: 18,
-    overflow: 'hidden',
-    alignSelf: 'center',
-    maxWidth: '75%',
-  },
-  date: {
-    color: 'white',
-    fontSize: 11,
-  },
-  log: {
-    display: 'flex',
-    borderRadius: 9,
-    paddingVertical: 9,
-    paddingHorizontal: 20,
-    width: '87%',
-    height: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: 0.3,
-    borderColor: 'white',
-  },
-  switchContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-  },
-  separator: {
-    marginTop: 20,
-    height: 1,
-    width: '90%',
-    alignSelf: 'center',
-  },
-  column: {
-    width: '75%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  scrollViewContainer: {
-    alignItems: 'center',
-    marginVertical: 20,
-    paddingHorizontal: 20,
-  },
-});

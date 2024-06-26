@@ -4,7 +4,7 @@ import { firestore } from '../../firebase/config';
 import { UserDataContext } from '../../context/UserDataContext';
 
 export const useSummaryData = (monthYear, type, refreshTrigger) => {
-  const { userData } = useContext(UserDataContext);
+  const { userData } = useContext(UserDataContext)!;
   const [summaryData, setSummaryData] = useState({
     totalCost: 0,
     totalEstimatedProfit: 0,

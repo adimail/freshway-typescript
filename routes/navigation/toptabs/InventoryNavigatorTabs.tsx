@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useLayoutEffect } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -14,16 +16,17 @@ import {
 
 const Tab = createMaterialTopTabNavigator();
 
+const NavigateToCategories = (navigation: any) => {
+  navigation.navigate('ModalStacks', {
+    screen: 'Post',
+    params: {
+      from: 'Home screen',
+    },
+  });
+};
+
 export const InventoryNavigatorTabs = () => {
   const navigation = useNavigation();
-  const NavigateToCategories = () => {
-    navigation.navigate('ModalStacks', {
-      screen: 'Post',
-      params: {
-        from: 'Home screen',
-      },
-    });
-  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,13 +35,14 @@ export const InventoryNavigatorTabs = () => {
           <FontAwesome
             name="plus-circle"
             size={27}
-            onPress={() => NavigateToCategories()}
+            onPress={() => NavigateToCategories(navigation)}
             color={colors.lightPurple}
           />
         </View>
       ),
     });
   }, [navigation]);
+
   return (
     <Tab.Navigator initialRouteName="SeedsView" screenOptions={screenOptions}>
       <Tab.Screen name="SeedsView" component={SeedsNavigator} options={{ tabBarLabel: 'Seeds' }} />

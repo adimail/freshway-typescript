@@ -3,14 +3,11 @@ import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import { fontSize, colors } from '../theme';
 import { View, Text } from 'react-native';
 
-const showToast = ({ title, body, isDark }) => {
+const showToast = ({ title, body }) => {
   Toast.show({
     type: 'success',
     text1: title,
     text2: body,
-    props: {
-      isDark,
-    },
   });
 };
 
@@ -19,16 +16,14 @@ const toastConfig = {
     Overwrite 'success' type,
     by modifying the existing `BaseToast` component
   */
-  success: (props) => {
-    const { isDark } = props.props;
+  success: () => {
     const styles = {
-      backgroundColor: isDark ? colors.darkInput : colors.white,
-      text1Color: isDark ? colors.white : colors.black,
-      text2Color: isDark ? colors.lightyellow : colors.darkPurple,
+      backgroundColor: colors.white,
+      text1Color: colors.black,
+      text2Color: colors.darkPurple,
     };
     return (
       <BaseToast
-        {...props}
         style={{ borderLeftColor: colors.primary }}
         contentContainerStyle={{
           paddingHorizontal: 15,
@@ -51,9 +46,8 @@ const toastConfig = {
     Overwrite 'error' type,
     by modifying the existing `ErrorToast` component
   */
-  error: (props) => (
+  error: () => (
     <ErrorToast
-      {...props}
       text1Style={{
         fontSize: 17,
       }}

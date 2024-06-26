@@ -1,122 +1,111 @@
-import React, { useState, useContext, useEffect } from 'react'
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  Button,
-  ScrollView,
-} from 'react-native'
-import ScreenTemplate from '../../components/ScreenTemplate'
-import { useFocusEffect } from '@react-navigation/native'
-import { ColorSchemeContext } from '../../context/ColorSchemeContext'
-import { HomeTitleContext } from '../../context/HomeTitleContext'
-import { UserDataContext } from '../../context/UserDataContext'
-import { colors } from '../../theme'
-import CustomSwitch from '../../components/toggleSwitch'
-import { firestore } from '../../firebase/config'
-import { doc, updateDoc, getDoc } from 'firebase/firestore'
-import { showToast } from '../../utils/ShowToast'
-import IconButton from '../../components/IconButton'
+import React, { useState, useContext, useEffect } from 'react';
+import { Text, View, TextInput, StyleSheet, Button, ScrollView } from 'react-native';
+import ScreenTemplate from '../../components/ScreenTemplate';
+import { useFocusEffect } from '@react-navigation/native';
+import { HomeTitleContext } from '../../context/HomeTitleContext';
+import { UserDataContext } from '../../context/UserDataContext';
+import { colors } from '../../theme';
+import CustomSwitch from '../../components/toggleSwitch';
+import { firestore } from '../../firebase/config';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { showToast } from '../../utils/ShowToast';
+import IconButton from '../../components/IconButton';
 
 export default function Post() {
-  const { scheme } = useContext(ColorSchemeContext)
-  const { setTitle } = useContext(HomeTitleContext)
-  const { userData } = useContext(UserDataContext)
-  const isDark = scheme === 'dark'
-  const [type, setType] = useState('Sell')
-  const [newCategory, setNewCategory] = useState('')
-  const [parentCategory, setParentCategory] = useState('Shop')
-  const [subCategories, setSubCategories] = useState(['Sell', 'Credit'])
+  const { setTitle } = useContext(HomeTitleContext);
+  const { userData } = useContext(UserDataContext)!;
+  const isDark = true;
+  const [type, setType] = useState('Sell');
+  const [newCategory, setNewCategory] = useState('');
+  const [parentCategory, setParentCategory] = useState('Shop');
+  const [subCategories, setSubCategories] = useState(['Sell', 'Credit']);
 
   useFocusEffect(() => {
-    setTitle('Custom Categories')
-  })
+    setTitle('Custom Categories');
+  });
 
-  const [sellCategories, setSellCategories] = useState([])
-  const [creditCategories, setCreditCategories] = useState([])
+  const [sellCategories, setSellCategories] = useState([]);
+  const [creditCategories, setCreditCategories] = useState([]);
   const [inventoryCategories, setInventoryCategories] = useState({
     seeds: { name: [], company: [], crops: [], variety: [] },
     fertilizers: { name: [], company: [] },
     pesticides: { name: [], company: [] },
-  })
+  });
 
   // Fetch categories from Firestore
   useEffect(() => {
     const fetchCategories = async () => {
       if (userData) {
         try {
-          const userDocRef = doc(firestore, 'users', userData.id)
-          const docSnap = await getDoc(userDocRef)
-          const userCategories = docSnap.data()
+          const userDocRef = doc(firestore, 'users', userData.id);
+          const docSnap = await getDoc(userDocRef);
+          const userCategories = docSnap.data();
 
           if (userCategories) {
-            setSellCategories(userCategories.Sell || [])
-            setCreditCategories(userCategories.Credit || [])
+            setSellCategories(userCategories.Sell || []);
+            setCreditCategories(userCategories.Credit || []);
             setInventoryCategories(
               userCategories.inventory || {
                 seeds: { name: [], company: [], crops: [], variety: [] },
                 fertilizers: { name: [], company: [] },
                 pesticides: { name: [], company: [] },
-              },
-            )
+              }
+            );
           }
         } catch (error) {
-          console.error('Error fetching categories:', error.message)
+          console.error('Error fetching categories:', error.message);
           showToast({
             title: 'Error',
             body: 'Failed to fetch categories. Please try again.',
             isDark,
-          })
+          });
         }
       }
-    }
+    };
 
-    fetchCategories()
-  }, [userData, isDark])
+    fetchCategories();
+  }, [userData, isDark]);
 
   // Update function to set subcategories based on parent category
   const onSelectParentCategory = (category) => {
-    setParentCategory(category)
+    setParentCategory(category);
 
     // Set appropriate subcategories based on selected parent category
-    let newSubCategories = []
+    let newSubCategories = [];
     switch (category) {
       case 'Shop':
-        newSubCategories = ['Sell', 'Credit']
-        break
+        newSubCategories = ['Sell', 'Credit'];
+        break;
       case 'Seeds':
-        newSubCategories = ['company', 'crops', 'variety']
-        break
+        newSubCategories = ['company', 'crops', 'variety'];
+        break;
       case 'Fertilizers':
-        newSubCategories = ['name', 'company']
-        break
+        newSubCategories = ['name', 'company'];
+        break;
       case 'Pesticides':
-        newSubCategories = ['name', 'company']
-        break
+        newSubCategories = ['name', 'company'];
+        break;
       default:
-        newSubCategories = []
+        newSubCategories = [];
     }
-    setSubCategories(newSubCategories)
-    setType(newSubCategories[0])
-  }
+    setSubCategories(newSubCategories);
+    setType(newSubCategories[0]);
+  };
 
   // Function to add a category
   const addCategory = async () => {
     if (newCategory) {
-      let updatedCategories = []
-      let updatedInventory = {}
+      let updatedCategories = [];
+      let updatedInventory = {};
 
       if (type === 'Sell') {
-        updatedCategories = [...sellCategories]
+        updatedCategories = [...sellCategories];
       } else if (type === 'Credit') {
-        updatedCategories = [...creditCategories]
+        updatedCategories = [...creditCategories];
       } else {
         updatedCategories = [
-          ...inventoryCategories[parentCategory.toLowerCase()][
-            type.toLowerCase()
-          ],
-        ]
+          ...inventoryCategories[parentCategory.toLowerCase()][type.toLowerCase()],
+        ];
       }
 
       if (updatedCategories.length >= 9) {
@@ -124,19 +113,19 @@ export default function Post() {
           title: 'Stack Overflow',
           body: 'You can add up to 9 max categories',
           isDark,
-        })
-        return
+        });
+        return;
       }
 
-      updatedCategories.push(newCategory)
+      updatedCategories.push(newCategory);
 
       try {
-        const userDocRef = doc(firestore, 'users', userData.id)
+        const userDocRef = doc(firestore, 'users', userData.id);
 
         if (type === 'Sell' || type === 'Credit') {
           await updateDoc(userDocRef, {
             [type.toLowerCase()]: updatedCategories,
-          })
+          });
         } else {
           updatedInventory = {
             ...inventoryCategories,
@@ -144,72 +133,70 @@ export default function Post() {
               ...inventoryCategories[parentCategory.toLowerCase()],
               [type.toLowerCase()]: updatedCategories,
             },
-          }
+          };
 
           await updateDoc(userDocRef, {
             inventory: updatedInventory,
-          })
+          });
 
-          setInventoryCategories(updatedInventory)
+          setInventoryCategories(updatedInventory);
         }
 
         if (type === 'Sell') {
-          setSellCategories(updatedCategories)
+          setSellCategories(updatedCategories);
         } else if (type === 'Credit') {
-          setCreditCategories(updatedCategories)
+          setCreditCategories(updatedCategories);
         }
 
         showToast({
           title: 'Category Added',
           body: newCategory,
           isDark,
-        })
+        });
 
-        setNewCategory('')
+        setNewCategory('');
       } catch (error) {
-        console.error('Error adding category:', error.message)
+        console.error('Error adding category:', error.message);
         showToast({
           title: 'Error',
           body: 'Failed to add category. Please try again.',
           isDark,
-        })
+        });
       }
     }
-  }
+  };
 
   // Function to remove a category
   const removeCategory = async (category) => {
-    let updatedCategories = []
-    let updatedInventory = {}
+    let updatedCategories = [];
+    let updatedInventory = {};
 
     if (type === 'Sell') {
-      updatedCategories = [...sellCategories]
+      updatedCategories = [...sellCategories];
     } else if (type === 'Credit') {
-      updatedCategories = [...creditCategories]
+      updatedCategories = [...creditCategories];
     } else {
       updatedCategories = [
-        ...inventoryCategories[parentCategory.toLowerCase()][
-          type.toLowerCase()
-        ],
-      ]
+        ...inventoryCategories[parentCategory.toLowerCase()][type.toLowerCase()],
+      ];
     }
 
     if (updatedCategories.length === 1) {
-      alert('You must have at least one category in the list.')
-      return
+      alert('You must have at least one category in the list.');
+      return;
     }
 
-    const index = updatedCategories.indexOf(category)
+    const index = updatedCategories.indexOf(category);
     if (index !== -1) {
-      updatedCategories.splice(index, 1)
+      updatedCategories.splice(index, 1);
 
       try {
-        const userDocRef = doc(firestore, 'users', userData.id)
+        const userDocRef = doc(firestore, 'users', userData.id);
 
         if (type === 'Sell' || type === 'Credit') {
           await updateDoc(userDocRef, {
             [type.toLowerCase()]: updatedCategories,
-          })
+          });
         } else {
           updatedInventory = {
             ...inventoryCategories,
@@ -217,59 +204,56 @@ export default function Post() {
               ...inventoryCategories[parentCategory.toLowerCase()],
               [type.toLowerCase()]: updatedCategories,
             },
-          }
+          };
 
           await updateDoc(userDocRef, {
             inventory: updatedInventory,
-          })
+          });
 
-          setInventoryCategories(updatedInventory)
+          setInventoryCategories(updatedInventory);
         }
 
         if (type === 'Sell') {
-          setSellCategories(updatedCategories)
+          setSellCategories(updatedCategories);
         } else if (type === 'Credit') {
-          setCreditCategories(updatedCategories)
+          setCreditCategories(updatedCategories);
         }
 
         showToast({
           title: 'Category Removed',
           body: category,
           isDark,
-        })
+        });
       } catch (error) {
-        console.error('Error removing category:', error.message)
+        console.error('Error removing category:', error.message);
         showToast({
           title: 'Error',
           body: 'Failed to remove category. Please try again.',
           isDark,
-        })
+        });
       }
     }
-  }
+  };
 
   const onSelectSwitch = (value) => {
-    setType(value)
-  }
+    setType(value);
+  };
 
   const renderCategories = () => {
-    let categories = []
+    let categories = [];
     if (type === 'Sell') {
-      categories = sellCategories
+      categories = sellCategories;
     } else if (type === 'Credit') {
-      categories = creditCategories
+      categories = creditCategories;
     } else {
-      categories =
-        inventoryCategories[parentCategory.toLowerCase()][type.toLowerCase()]
+      categories = inventoryCategories[parentCategory.toLowerCase()][type.toLowerCase()];
     }
 
     return (
       <View style={styles.cat}>
         {categories.map((item, index) => (
           <View style={styles.categoryItem} key={index}>
-            <Text style={[styles.text, { color: isDark ? 'white' : 'black' }]}>
-              {item}
-            </Text>
+            <Text style={[styles.text, { color: isDark ? 'white' : 'black' }]}>{item}</Text>
             <IconButton
               icon="trash"
               color={colors.primary}
@@ -280,15 +264,14 @@ export default function Post() {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <ScreenTemplate>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <CustomSwitch
-            selectionMode={1}
             roundCorner
             options={['Shop', 'Seeds', 'Fertilizers', 'Pesticides']}
             onSelectSwitch={onSelectParentCategory}
@@ -307,10 +290,7 @@ export default function Post() {
           />
 
           <View
-            style={[
-              styles.separator,
-              { backgroundColor: colors.blueLight, marginVertical: 30 },
-            ]}
+            style={[styles.separator, { backgroundColor: colors.blueLight, marginVertical: 30 }]}
           />
 
           <View style={styles.inputContainer}>
@@ -318,24 +298,20 @@ export default function Post() {
               style={[styles.input, { color: isDark ? 'white' : 'black' }]}
               value={newCategory}
               onChangeText={(text) => {
-                setNewCategory(text)
+                setNewCategory(text);
               }}
               placeholder="Enter new category"
               placeholderTextColor={isDark ? 'white' : 'black'}
             />
 
-            <Button
-              title="Add New Category"
-              onPress={addCategory}
-              color={colors.primary}
-            />
+            <Button title="Add New Category" onPress={addCategory} color={colors.primary} />
           </View>
 
           {renderCategories()}
         </View>
       </ScrollView>
     </ScreenTemplate>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -402,4 +378,4 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
   },
-})
+});

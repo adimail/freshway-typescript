@@ -20,16 +20,16 @@ import ScreenTemplate from '../../components/ScreenTemplate';
 import { SummaryCard } from '../../components/expenseCard';
 import Section from '../../components/inventorysection';
 import CustomSwitch from '../../components/toggleSwitch';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import { UserDataContext } from '../../context/UserDataContext';
 import { colors } from '../../theme';
 import { showToast } from '../../utils/ShowToast';
 import { AddStock } from '../../utils/addstock';
 
 export default function FertilizersView() {
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { userData } = useContext(UserDataContext)!;
+
+  const isDark = true;
   const styles = useStyles(isDark);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -83,7 +83,7 @@ export default function FertilizersView() {
           value={value}
           mode="date"
           display="spinner"
-          onChange={(event, selectedDate) => handleDateChange(selectedDate || value, key)}
+          onChange={(selectedDate) => handleDateChange(selectedDate || value, key)}
         />
       );
     }
@@ -94,7 +94,7 @@ export default function FertilizersView() {
         value={value}
         mode="date"
         display="default"
-        onChange={(event, selectedDate) => handleDateChange(selectedDate || value, key)}
+        onChange={(selectedDate) => handleDateChange(selectedDate || value, key)}
       />
     ) : null;
   };
@@ -148,7 +148,6 @@ export default function FertilizersView() {
         showToast({
           title: `${formData.name} Stock added `,
           body: `Total Cost ${formData.totalCost}`,
-          isDark,
         });
         setRefreshTrigger((prev) => prev + 1); // Trigger summary data refresh
       })
@@ -172,8 +171,8 @@ export default function FertilizersView() {
         <View style={[styles.top]}>
           <View style={styles.container}>
             <SummaryCard
-              expense={summaryData.totalCost}
-              profit={summaryData.totalEstimatedProfit}
+              expense={summaryData.totalCost.toString()}
+              profit={summaryData.totalEstimatedProfit.toString()}
             />
           </View>
 
@@ -212,7 +211,7 @@ export default function FertilizersView() {
               <CustomSwitch
                 roundCorner
                 options={['Water soluble', 'Granule']}
-                onSelectSwitch={(value) => {
+                onSelectSwitch={(value: string) => {
                   handleInputChange('type', value);
                 }}
                 height={46}
@@ -221,14 +220,14 @@ export default function FertilizersView() {
               <SelectField
                 label="Fertilizer name"
                 selectedValue={formData.name}
-                onValueChange={(value) => handleInputChange('name', value)}
+                onValueChange={(value: string) => handleInputChange('name', value)}
                 data={fertilizersData.name || ['Default']}
               />
 
               <SelectField
                 label="Company"
                 selectedValue={formData.company}
-                onValueChange={(value) => handleInputChange('company', value)}
+                onValueChange={(value: string) => handleInputChange('company', value)}
                 data={fertilizersData.company || ['Default']}
               />
             </Section>
@@ -265,10 +264,9 @@ export default function FertilizersView() {
 
                 <View style={styles.inlineInput}>
                   <CustomSwitch
-                    selectionMode={1}
                     roundCorner
                     options={['Kg', 'ml']}
-                    onSelectSwitch={(value) => {
+                    onSelectSwitch={(value: string) => {
                       handleInputChange('state', value);
                     }}
                     height={46}

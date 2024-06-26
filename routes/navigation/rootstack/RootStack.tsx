@@ -10,7 +10,7 @@ import { colors } from '../../../theme';
 const Stack = createStackNavigator();
 
 export default function RootStack() {
-  const { userData } = useContext(UserDataContext);
+  const { userData } = useContext(UserDataContext)!;
 
   const openGithub = () => {
     Linking.openURL('https://github.com/adimail/freshway');

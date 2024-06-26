@@ -14,7 +14,7 @@ import { SelectField, seedsinitialFormData, SubmitData } from './utils';
 import { colors } from '../../theme';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { UserDataContext } from '../../context/UserDataContext';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import { showToast } from '../../utils/ShowToast';
 import { AddStock } from '../../utils/addstock';
 import { SummaryCard } from '../../components/expenseCard';
@@ -25,9 +25,9 @@ import { useSummaryData } from './useSummaryData';
 import { SeedsSummary } from './summary';
 
 export default function SeedsView() {
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { userData } = useContext(UserDataContext)!;
+
+  const isDark = true;
   const styles = useStyles(isDark);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -207,8 +207,8 @@ export default function SeedsView() {
         <View style={[styles.top]}>
           <View style={styles.container}>
             <SummaryCard
-              expense={summaryData.totalCost}
-              profit={summaryData.totalEstimatedProfit}
+              expense={summaryData.totalCost.toString()}
+              profit={summaryData.totalEstimatedProfit.toString()}
             />
           </View>
 

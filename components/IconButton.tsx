@@ -1,13 +1,26 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 
-export default function IconButton(props: any) {
-  const { icon, onPress, color, size, containerStyle } = props;
+interface IconButtonProps extends TouchableOpacityProps {
+  icon: string;
+  color: string; // Assuming color is a string based on colors.darkPurple example
+  size: number;
+}
 
+const IconButton: React.FC<IconButtonProps> = ({
+  icon,
+  onPress,
+  color,
+  size,
+  style,
+  ...restProps
+}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={containerStyle}>
-      <FontIcon name={icon} color={color} size={size} />
+    <TouchableOpacity onPress={onPress} style={[style]}>
+      <FontIcon name={icon} color={color} size={size} {...restProps} />
     </TouchableOpacity>
   );
-}
+};
+
+export default IconButton;

@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { colors, fontSize } from '../../theme';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 
 export default function RenderItem(props) {
   const { title, body } = props?.item;
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+
+  const isDark = true;
   const colorScheme = {
     text: isDark ? colors.white : colors.primaryText,
   };

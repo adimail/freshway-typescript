@@ -1,19 +1,21 @@
 import { Asset } from 'expo-asset';
 
 // svg
-import Logo from '../assets/images/Logo.svg';
+import Logo from '../assets/images/logo.svg';
 
-export const svgs = {
+// Define types for your assets
+type SvgAsset = typeof Logo; // Assuming Logo is the correct type for your SVG asset
+type ImageAsset = string; // Assuming URLs or paths to PNG files
+
+export const svgs: { [key: string]: SvgAsset } = {
   logo: Logo,
 };
 
-// png/jpeg
-export const images = {
+const images: { [key: string]: ImageAsset } = {
   logo_sm: require('../assets/images/logo-sm.png'),
   logo_lg: require('../assets/images/logo-lg.png'),
 };
 
-// image preloading
 export const imageAssets = Object.keys(images).map((key) =>
   Asset.fromModule(images[key]).downloadAsync()
 );

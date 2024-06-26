@@ -1,20 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 import { UserDataContext } from '../../context/UserDataContext';
 import { colors, fontSize } from '../../theme';
 import { useNavigation } from '@react-navigation/native';
 
 export default function AllTimeInventoryHistory() {
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { userData } = useContext(UserDataContext)!;
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
   const [monthsSinceJoined, setMonthsSinceJoined] = useState([]);
-  const joinedDate = userData.joined.toDate();
+  const joinedDate = userData.joined;
   const currentDate = new Date();
 
   const navigatetomonth = (monthName) => {
@@ -22,7 +19,6 @@ export default function AllTimeInventoryHistory() {
       screen: 'InventoryMonth',
       params: {
         month: monthName,
-        userData,
       },
     });
   };
@@ -60,7 +56,7 @@ export default function AllTimeInventoryHistory() {
         showsVerticalScrollIndicator={false}
         style={[styles.main, { paddingTop: 20 }]}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <Text style={[styles.header, { color: isDark ? 'white' : 'black' }]}>All time history</Text>
+        <Text style={[styles.header, { color: 'white' }]}>All time history</Text>
         <View>
           <View style={styles.history}>
             {monthsSinceJoined.map((month, index) => (

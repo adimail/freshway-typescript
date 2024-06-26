@@ -1,15 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 import { colors } from '../theme';
-import { ColorSchemeContext } from '../context/ColorSchemeContext';
 
 export default function TextInputBox(props) {
   const { secureTextEntry, placeholder, onChangeText, value, autoCapitalize, keyboardType } = props;
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
   const colorScheme = {
-    input: isDark ? colors.darkInput : colors.white,
-    text: isDark ? colors.white : colors.primaryText,
+    input: colors.darkInput,
+    text: colors.white,
   };
 
   return (

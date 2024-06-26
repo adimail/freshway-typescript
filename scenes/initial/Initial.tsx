@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { UserDataContext } from '../../context/UserDataContext';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { firestore, auth } from '../../firebase/config';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -21,12 +20,10 @@ if (!global.atob) {
 export default function Initial() {
   const [, setChecked] = useAtom(checkedAtom);
   const [, setLoggedIn] = useAtom(loggedInAtom);
-  const { setUserData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { setUserData } = useContext(UserDataContext)!;
   const colorScheme = {
-    container: isDark ? colors.dark : colors.white,
-    text: isDark ? colors.white : colors.primaryText,
+    container: colors.dark,
+    text: colors.white,
   };
 
   useEffect(() => {

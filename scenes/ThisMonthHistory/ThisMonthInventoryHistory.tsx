@@ -9,7 +9,7 @@ import {
   Vibration,
 } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import { UserDataContext } from '../../context/UserDataContext';
 import CustomSwitch from '../../components/toggleSwitch';
 import { styles } from './styles';
@@ -23,9 +23,9 @@ import { updateSummary } from '../../utils/addstock';
 import { NetSummaryComponent } from '../inventory/summary';
 
 const ThisMonthInventoryHistory = () => {
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { userData } = useContext(UserDataContext)!;
+
+  const isDark = true;
 
   const [selectedLog, setSelectedLog] = useState(null);
   const [type, setType] = useState('All');
@@ -199,7 +199,6 @@ const ThisMonthInventoryHistory = () => {
             alignSelf: 'center',
           }}>
           <CustomSwitch
-            selectionMode={1}
             roundCorner
             options={['All', 'Seeds', 'Pesticides', 'Fertilizers']}
             onSelectSwitch={onSelectSwitch}
@@ -351,7 +350,7 @@ const ThisMonthInventoryHistory = () => {
           </View>
         )}
         {!isLoading && dataToDisplay.length > 0 && (
-          <NetSummaryComponent refreshTrigger={refreshTrigger} />
+          <NetSummaryComponent refreshTrigger={refreshTrigger} time={monthYear} />
         )}
       </ScrollView>
     </ScreenTemplate>

@@ -1,8 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ColorSchemeContext } from '../../../context/ColorSchemeContext';
-import { lightProps, darkProps } from './navigationProps/navigationProps';
-import HeaderStyle from './headerComponents/HeaderStyle';
 
 import Profile from '../../../scenes/profile';
 import Edit from '../../../scenes/edit';
@@ -11,25 +8,11 @@ const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
 export const ProfileNavigator = () => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const navigationProps = scheme === 'dark' ? darkProps : lightProps;
   return (
-    <Stack.Navigator screenOptions={navigationProps}>
+    <Stack.Navigator>
       <RootStack.Group>
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={() => ({
-            headerBackground: scheme === 'dark' ? null : () => <HeaderStyle />,
-          })}
-        />
-        <Stack.Screen
-          name="Edit"
-          component={Edit}
-          options={() => ({
-            headerBackground: scheme === 'dark' ? null : () => <HeaderStyle />,
-          })}
-        />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Edit" component={Edit} />
       </RootStack.Group>
     </Stack.Navigator>
   );

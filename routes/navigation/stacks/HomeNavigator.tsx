@@ -1,46 +1,22 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useMemo, Dispatch, SetStateAction } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeTitleContext } from '../../../context/HomeTitleContext';
-import { ColorSchemeContext } from '../../../context/ColorSchemeContext';
-import { lightProps, darkProps } from './navigationProps/navigationProps';
-import HeaderStyle from './headerComponents/HeaderStyle';
 
 import Home from '../../../scenes/home';
 
 const Stack = createStackNavigator();
 
 export const HomeNavigator = () => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const navigationProps = scheme === 'dark' ? darkProps : lightProps;
-  const [title, setTitle] = useState('default title');
+  const [title, setTitle] = useState<string>('default title');
+
+  // Correctly specify the types for title and setTitle
+  const contextValue = useMemo(() => ({ title, setTitle }), [title, setTitle]);
+
   return (
-    <HomeTitleContext.Provider
-      value={{
-        title,
-        setTitle,
-      }}>
-      <HomeTitleContext.Consumer>
-        {(ctx) => (
-          <Stack.Navigator screenOptions={navigationProps}>
-            <Stack.Screen
-              name="Freshway"
-              component={Home}
-              options={() => ({
-                headerBackground: scheme === 'dark' ? null : () => <HeaderStyle />,
-              })}
-            />
-            <Stack.Screen
-              name="Profile"
-              component={Detail}
-              options={{
-                headerShown: false,
-                title: ctx.title,
-                headerBackground: scheme === 'dark' ? null : () => <HeaderStyle />,
-              }}
-            />
-          </Stack.Navigator>
-        )}
-      </HomeTitleContext.Consumer>
+    <HomeTitleContext.Provider value={contextValue}>
+      <Stack.Navigator>
+        <Stack.Screen name="Freshway" component={Home} />
+      </Stack.Navigator>
     </HomeTitleContext.Provider>
   );
 };

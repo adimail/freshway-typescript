@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeTitleContext } from '../../../../context/HomeTitleContext';
 
@@ -11,14 +11,13 @@ import InventoryMonth from '../../../../scenes/month/inventoryMonth';
 const Stack = createStackNavigator();
 
 export const ModalStacks = () => {
-  const [title, setTitle] = useState('default title');
+  const [title, setTitle] = useState<string>('default title');
+
+  // Correctly specify the types for title and setTitle
+  const contextValue = useMemo(() => ({ title, setTitle }), [title, setTitle]);
 
   return (
-    <HomeTitleContext.Provider
-      value={{
-        title,
-        setTitle,
-      }}>
+    <HomeTitleContext.Provider value={contextValue}>
       <HomeTitleContext.Consumer>
         {(ctx) => (
           <Stack.Navigator

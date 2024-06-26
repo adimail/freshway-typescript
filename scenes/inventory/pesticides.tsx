@@ -14,7 +14,7 @@ import { SelectField, isSameDay, pesticidesinitialFormData, SubmitData } from '.
 import { colors } from '../../theme';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { UserDataContext } from '../../context/UserDataContext';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import { showToast } from '../../utils/ShowToast';
 import { AddStock } from '../../utils/addstock';
 import { SummaryCard } from '../../components/expenseCard';
@@ -26,9 +26,9 @@ import CustomSwitch from '../../components/toggleSwitch';
 import { PesticidesSummary } from './summary';
 
 export default function PesticidesView() {
-  const { userData } = useContext(UserDataContext);
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const { userData } = useContext(UserDataContext)!;
+
+  const isDark = true;
   const styles = useStyles(isDark);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -172,8 +172,8 @@ export default function PesticidesView() {
         <View style={[styles.top]}>
           <View style={styles.container}>
             <SummaryCard
-              expense={summaryData.totalCost}
-              profit={summaryData.totalEstimatedProfit}
+              expense={summaryData.totalCost.toString()}
+              profit={summaryData.totalEstimatedProfit.toString()}
             />
           </View>
 
@@ -283,7 +283,6 @@ export default function PesticidesView() {
 
                 <View style={styles.inlineInput}>
                   <CustomSwitch
-                    selectionMode={1}
                     roundCorner
                     options={['Kg', 'ml']}
                     onSelectSwitch={(value) => {

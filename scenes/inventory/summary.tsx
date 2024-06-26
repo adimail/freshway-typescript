@@ -2,11 +2,19 @@ import React, { useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { SummaryRow, renderSummarySection } from './utils';
 import { useStyles } from './styles';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import { colors } from '../../theme';
 import { useSummaryData } from './useSummaryData';
 
-export const NetSummaryComponent = ({ refreshTrigger, time }) => {
+interface NetSummaryComponentProps {
+  refreshTrigger: number;
+  time: string;
+}
+
+export const NetSummaryComponent: React.FC<NetSummaryComponentProps> = ({
+  refreshTrigger,
+  time,
+}) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -46,14 +54,9 @@ export const NetSummaryComponent = ({ refreshTrigger, time }) => {
     },
   });
 
-  const monthYear = new Date().toLocaleDateString('en-GB', {
-    month: 'short',
-    year: 'numeric',
-  });
-
   const categories = ['net', 'seeds', 'pesticides', 'fertilizers'];
   const summaryData = categories.reduce((acc, category) => {
-    acc[category] = useSummaryData(time || monthYear, category, refreshTrigger).summaryData;
+    acc[category] = useSummaryData(time, category, refreshTrigger).summaryData;
     return acc;
   }, {});
 
@@ -107,8 +110,7 @@ export const NetSummaryComponent = ({ refreshTrigger, time }) => {
 };
 
 export const SeedsSummary = ({ formData }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
   const styles = useStyles(isDark);
 
   if (!formData) return null;
@@ -218,8 +220,7 @@ export const SeedsSummary = ({ formData }) => {
 };
 
 export const PesticidesSummary = ({ formData }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
   const styles = useStyles(isDark);
 
   if (!formData) return null;
@@ -325,8 +326,7 @@ export const PesticidesSummary = ({ formData }) => {
 };
 
 export const FertilizersSummary = ({ formData }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
   const styles = useStyles(isDark);
 
   if (!formData) return null;

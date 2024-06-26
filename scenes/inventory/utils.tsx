@@ -4,7 +4,6 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { useStyles } from './styles';
 import { colors } from '../../theme';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
 
 export const renderSummarySection = (title, content) => {
   const styles = useStyles();
@@ -70,8 +69,7 @@ export const pesticidesinitialFormData = {
 };
 
 export const SummaryRow = ({ label, value }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
   const styles = useStyles(isDark);
 
   return (
@@ -83,8 +81,7 @@ export const SummaryRow = ({ label, value }) => {
 };
 
 export const SelectField = ({ label, selectedValue, onValueChange, data }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
   const styles = useStyles(isDark);
 
   return (
@@ -110,8 +107,7 @@ export const isSameDay = (date1, date2) => {
 };
 
 export const SubmitData = ({ formData, handleSubmitData }) => {
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+  const isDark = true;
   const styles = useStyles(isDark);
 
   return (

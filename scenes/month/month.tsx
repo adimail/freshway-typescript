@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState, useMemo } from 'react';
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { colors, fontSize } from '../../theme';
-import { ColorSchemeContext } from '../../context/ColorSchemeContext';
+
 import CustomSwitch from '../../components/toggleSwitch';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/config';
@@ -14,8 +14,8 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export default function Month({ route }) {
   const { month, userData } = route.params;
-  const { scheme } = useContext(ColorSchemeContext);
-  const isDark = scheme === 'dark';
+
+  const isDark = true;
   const { setTitle } = useContext(HomeTitleContext);
   const [type, setType] = useState('Sell');
   const [expenseData, setExpenseData] = useState(null);
@@ -225,7 +225,6 @@ export default function Month({ route }) {
             alignSelf: 'center',
           }}>
           <CustomSwitch
-            selectionMode={1}
             roundCorner
             options={['Sell', 'Credit']}
             onSelectSwitch={onSelectSwitch}
@@ -287,7 +286,6 @@ export default function Month({ route }) {
               contentContainerStyle={styles.scrollViewContainer}
               showsVerticalScrollIndicator={false}>
               <CustomSwitch
-                selectionMode={1}
                 roundCorner
                 options={['Date', 'Amount']}
                 onSelectSwitch={onSelectFilter}
@@ -296,7 +294,6 @@ export default function Month({ route }) {
                 borderRadius={10}
               />
               <CustomSwitch
-                selectionMode={1}
                 roundCorner
                 options={type === 'Credit' ? CreditCategories : expenseCategories}
                 onSelectSwitch={onSelectCategoryFilter}

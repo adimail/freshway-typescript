@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Provider } from 'jotai';
 // import './utils/ignore';
-import { ColorSchemeContextProvider } from './context/ColorSchemeContext';
 import { UserDataContextProvider } from './context/UserDataContext';
 
 // assets
@@ -29,11 +28,9 @@ const App = () => {
   if (!didLoad) return <View />;
   return (
     <Provider>
-      <ColorSchemeContextProvider>
-        <UserDataContextProvider>
-          <Router />
-        </UserDataContextProvider>
-      </ColorSchemeContextProvider>
+      <UserDataContextProvider>
+        <Router />
+      </UserDataContextProvider>
     </Provider>
   );
 };
