@@ -11,7 +11,8 @@ export interface UserData {
     category: string;
     amounts: string[];
   }[];
-  joined: Date;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  joined: Date | any;
   inventory: {
     seeds: {
       crops: string[];

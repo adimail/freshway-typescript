@@ -7,26 +7,39 @@ import { UserDataContext } from '../../context/UserDataContext';
 import { colors } from '../../theme';
 import CustomSwitch from '../../components/toggleSwitch';
 import { firestore } from '../../firebase/config';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, DocumentReference } from 'firebase/firestore';
 import { showToast } from '../../utils/ShowToast';
 import IconButton from '../../components/IconButton';
 
-export default function Post() {
+interface InventoryCategory {
+  name: string[];
+  company: string[];
+  crops?: string[];
+  variety?: string[];
+}
+
+interface InventoryCategories {
+  seeds: InventoryCategory;
+  fertilizers: InventoryCategory;
+  pesticides: InventoryCategory;
+}
+
+const Post: React.FC = () => {
   const { setTitle } = useContext(HomeTitleContext);
   const { userData } = useContext(UserDataContext)!;
   const isDark = true;
-  const [type, setType] = useState('Sell');
-  const [newCategory, setNewCategory] = useState('');
-  const [parentCategory, setParentCategory] = useState('Shop');
-  const [subCategories, setSubCategories] = useState(['Sell', 'Credit']);
+  const [type, setType] = useState<string>('Sell');
+  const [newCategory, setNewCategory] = useState<string>('');
+  const [parentCategory, setParentCategory] = useState<string>('Shop');
+  const [subCategories, setSubCategories] = useState<string[]>(['Sell', 'Credit']);
 
   useFocusEffect(() => {
     setTitle('Custom Categories');
   });
 
-  const [sellCategories, setSellCategories] = useState([]);
-  const [creditCategories, setCreditCategories] = useState([]);
-  const [inventoryCategories, setInventoryCategories] = useState({
+  const [sellCategories, setSellCategories] = useState<string[]>([]);
+  const [creditCategories, setCreditCategories] = useState<string[]>([]);
+  const [inventoryCategories, setInventoryCategories] = useState<InventoryCategories>({
     seeds: { name: [], company: [], crops: [], variety: [] },
     fertilizers: { name: [], company: [] },
     pesticides: { name: [], company: [] },
@@ -37,7 +50,7 @@ export default function Post() {
     const fetchCategories = async () => {
       if (userData) {
         try {
-          const userDocRef = doc(firestore, 'users', userData.id);
+          const userDocRef: DocumentReference = doc(firestore, 'users', userData.id);
           const docSnap = await getDoc(userDocRef);
           const userCategories = docSnap.data();
 
@@ -65,11 +78,11 @@ export default function Post() {
   }, [userData, isDark]);
 
   // Update function to set subcategories based on parent category
-  const onSelectParentCategory = (category) => {
+  const onSelectParentCategory = (category: string) => {
     setParentCategory(category);
 
     // Set appropriate subcategories based on selected parent category
-    let newSubCategories = [];
+    let newSubCategories: string[] = [];
     switch (category) {
       case 'Shop':
         newSubCategories = ['Sell', 'Credit'];
@@ -87,14 +100,14 @@ export default function Post() {
         newSubCategories = [];
     }
     setSubCategories(newSubCategories);
-    setType(newSubCategories[0]);
+    setType(newSubCategories[0] || '');
   };
 
   // Function to add a category
   const addCategory = async () => {
     if (newCategory) {
-      let updatedCategories = [];
-      let updatedInventory = {};
+      let updatedCategories: string[] = [];
+      let updatedInventory: InventoryCategories = { ...inventoryCategories };
 
       if (type === 'Sell') {
         updatedCategories = [...sellCategories];
@@ -102,7 +115,9 @@ export default function Post() {
         updatedCategories = [...creditCategories];
       } else {
         updatedCategories = [
-          ...inventoryCategories[parentCategory.toLowerCase()][type.toLowerCase()],
+          ...(inventoryCategories[parentCategory.toLowerCase() as keyof InventoryCategories][
+            type.toLowerCase() as keyof InventoryCategory
+          ] || ['']),
         ];
       }
 
@@ -117,7 +132,7 @@ export default function Post() {
       updatedCategories.push(newCategory);
 
       try {
-        const userDocRef = doc(firestore, 'users', userData.id);
+        const userDocRef: DocumentReference = doc(firestore, 'users', userData.id);
 
         if (type === 'Sell' || type === 'Credit') {
           await updateDoc(userDocRef, {
@@ -127,7 +142,7 @@ export default function Post() {
           updatedInventory = {
             ...inventoryCategories,
             [parentCategory.toLowerCase()]: {
-              ...inventoryCategories[parentCategory.toLowerCase()],
+              ...inventoryCategories[parentCategory.toLowerCase() as keyof InventoryCategories],
               [type.toLowerCase()]: updatedCategories,
             },
           };
@@ -152,7 +167,6 @@ export default function Post() {
 
         setNewCategory('');
       } catch (error) {
-        console.error('Error adding category:', error.message);
         showToast({
           title: 'Error',
           body: 'Failed to add category. Please try again.',
@@ -162,9 +176,9 @@ export default function Post() {
   };
 
   // Function to remove a category
-  const removeCategory = async (category) => {
-    let updatedCategories = [];
-    let updatedInventory = {};
+  const removeCategory = async (category: string) => {
+    let updatedCategories: string[] = [];
+    let updatedInventory: InventoryCategories = { ...inventoryCategories };
 
     if (type === 'Sell') {
       updatedCategories = [...sellCategories];
@@ -172,7 +186,9 @@ export default function Post() {
       updatedCategories = [...creditCategories];
     } else {
       updatedCategories = [
-        ...inventoryCategories[parentCategory.toLowerCase()][type.toLowerCase()],
+        ...(inventoryCategories[parentCategory.toLowerCase() as keyof InventoryCategories][
+          type.toLowerCase() as keyof InventoryCategory
+        ] || ['']),
       ];
     }
 
@@ -186,7 +202,7 @@ export default function Post() {
       updatedCategories.splice(index, 1);
 
       try {
-        const userDocRef = doc(firestore, 'users', userData.id);
+        const userDocRef: DocumentReference = doc(firestore, 'users', userData.id);
 
         if (type === 'Sell' || type === 'Credit') {
           await updateDoc(userDocRef, {
@@ -196,7 +212,7 @@ export default function Post() {
           updatedInventory = {
             ...inventoryCategories,
             [parentCategory.toLowerCase()]: {
-              ...inventoryCategories[parentCategory.toLowerCase()],
+              ...inventoryCategories[parentCategory.toLowerCase() as keyof InventoryCategories],
               [type.toLowerCase()]: updatedCategories,
             },
           };
@@ -217,44 +233,42 @@ export default function Post() {
         showToast({
           title: 'Category Removed',
           body: category,
-          isDark,
         });
       } catch (error) {
-        console.error('Error removing category:', error.message);
         showToast({
           title: 'Error',
           body: 'Failed to remove category. Please try again.',
-          isDark,
         });
       }
     }
   };
 
-  const onSelectSwitch = (value) => {
+  const onSelectSwitch = (value: string) => {
     setType(value);
   };
 
   const renderCategories = () => {
-    let categories = [];
+    let categories: string[] = [];
     if (type === 'Sell') {
       categories = sellCategories;
     } else if (type === 'Credit') {
       categories = creditCategories;
     } else {
-      categories = inventoryCategories[parentCategory.toLowerCase()][type.toLowerCase()];
+      categories = inventoryCategories[parentCategory.toLowerCase() as keyof InventoryCategories][
+        type.toLowerCase() as keyof InventoryCategory
+      ] || [''];
     }
 
     return (
       <View style={styles.cat}>
         {categories.map((item, index) => (
           <View style={styles.categoryItem} key={index}>
-            <Text style={[styles.text, { color: isDark ? 'white' : 'black' }]}>{item}</Text>
+            <Text style={{ color: isDark ? 'white' : 'black' }}>{item}</Text>
             <IconButton
               icon="trash"
               color={colors.primary}
               size={20}
               onPress={() => removeCategory(item)}
-              containerStyle={{ paddingRight: 15 }}
             />
           </View>
         ))}
@@ -272,6 +286,7 @@ export default function Post() {
             onSelectSwitch={onSelectParentCategory}
             selectionColor="#1C2833"
             height={50}
+            borderRadius={100}
           />
 
           <View style={[styles.separator]} />
@@ -282,6 +297,7 @@ export default function Post() {
             onSelectSwitch={onSelectSwitch}
             selectionColor={colors.blueLight}
             height={36}
+            borderRadius={100}
           />
 
           <View
@@ -307,7 +323,7 @@ export default function Post() {
       </ScrollView>
     </ScreenTemplate>
   );
-}
+};
 
 const styles = StyleSheet.create({
   lightContent: {
@@ -374,3 +390,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+
+export default Post;

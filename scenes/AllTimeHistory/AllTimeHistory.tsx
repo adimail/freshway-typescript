@@ -1,21 +1,50 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { UserDataContext } from '../../context/UserDataContext';
 import { colors, fontSize } from '../../theme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { UserData } from '../../types/user';
 
-export default function AllTimeHistory() {
+interface RootStackParamList {
+  ModalStacks: {
+    screen: 'Month';
+    params: {
+      month: string;
+      userData: UserData;
+    };
+  };
+}
+
+export default function AllTimeHistory(): JSX.Element {
   const { userData } = useContext(UserDataContext)!;
   const isDark = true;
-  const [refreshing, setRefreshing] = useState(false);
-  const navigation = useNavigation();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [monthsSinceJoined, setMonthsSinceJoined] = useState([]);
-  const joinedDate = userData.joined.toDate();
-  const currentDate = new Date();
+  const getMonthsSinceJoined = (): string[] => {
+    const joinedDate = userData.joined.toDate();
+    const result: string[] = [];
+    const now = new Date();
 
-  const navigatetomonth = (monthName) => {
+    const currentDate = new Date(joinedDate);
+
+    while (currentDate <= now) {
+      result.push(
+        currentDate.toLocaleDateString('en-US', {
+          month: 'short',
+          year: 'numeric',
+        })
+      );
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+
+    return result.reverse();
+  };
+
+  const monthsSinceJoined = getMonthsSinceJoined();
+
+  const navigateToMonth = (monthName: string) => {
     navigation.navigate('ModalStacks', {
       screen: 'Month',
       params: {
@@ -24,26 +53,6 @@ export default function AllTimeHistory() {
       },
     });
   };
-
-  useEffect(() => {
-    const months = [];
-    const currentMonth = new Date(joinedDate);
-
-    while (
-      currentMonth.getFullYear() < currentDate.getFullYear() ||
-      (currentMonth.getFullYear() === currentDate.getFullYear() &&
-        currentMonth.getMonth() <= currentDate.getMonth())
-    ) {
-      const formattedMonth = currentMonth.toLocaleDateString('en-GB', {
-        month: 'short',
-        year: 'numeric',
-      });
-      months.push(formattedMonth);
-      currentMonth.setMonth(currentMonth.getMonth() + 1);
-    }
-
-    setMonthsSinceJoined(months.reverse());
-  }, [userData.joined]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -63,9 +72,9 @@ export default function AllTimeHistory() {
           <View style={styles.history}>
             {monthsSinceJoined.map((month, index) => (
               <TouchableOpacity
-                onPress={() => navigatetomonth(month)}
+                onPress={() => navigateToMonth(month)}
                 key={index}
-                style={styles.monthcard}>
+                style={styles.monthCard}>
                 <Text style={[styles.title]}>{month}</Text>
               </TouchableOpacity>
             ))}
@@ -103,7 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     margin: 10,
   },
-  monthcard: {
+  monthCard: {
     backgroundColor: colors.lightPurple,
     width: '30%',
     maxWidth: 200,
