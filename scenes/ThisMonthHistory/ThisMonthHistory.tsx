@@ -346,13 +346,13 @@ export default function ThisMonthHistory() {
 
             <ScrollView
               horizontal
-              contentContainerStyle={styles.scrollViewContainer}
+              contentContainerStyle={[styles.scrollViewContainer, { flexDirection: 'row' }]}
               showsVerticalScrollIndicator={false}>
               <CustomSwitch
                 roundCorner
                 options={['Date', 'Amount']}
                 onSelectSwitch={onSelectFilter}
-                selectionColor="#1C2833"
+                selectionColor="#5e5e5e"
                 height={38}
                 borderRadius={10}
               />

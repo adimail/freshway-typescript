@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: colors.darkInput,
+    backgroundColor: colors.black,
   },
   footerView: {
     flex: 1,

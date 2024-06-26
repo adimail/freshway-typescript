@@ -221,12 +221,12 @@ export default function Home() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.primary]} />
         }>
         <View style={[styles.top]}>
-          <TouchableOpacity style={styles.container}>
+          <View style={styles.container}>
             <Card
               title="Current month aggregate"
               amount={type === 'Credit' ? CurrentMonthCredit : CurrentMonthExpense}
             />
-          </TouchableOpacity>
+          </View>
 
           <View style={[styles.separator]} />
 

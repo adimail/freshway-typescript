@@ -11,6 +11,13 @@ interface NetSummaryComponentProps {
   time: string;
 }
 
+interface SummaryData {
+  totalCost: number;
+  totalEstimatedProfit: number;
+}
+
+const categories = ['net', 'seeds', 'pesticides', 'fertilizers'];
+
 export const NetSummaryComponent: React.FC<NetSummaryComponentProps> = ({
   refreshTrigger,
   time,
@@ -54,13 +61,13 @@ export const NetSummaryComponent: React.FC<NetSummaryComponentProps> = ({
     },
   });
 
-  const categories = ['net', 'seeds', 'pesticides', 'fertilizers'];
-  const summaryData = categories.reduce((acc, category) => {
-    acc[category] = useSummaryData(time, category, refreshTrigger).summaryData;
-    return acc;
-  }, {});
+  const summaryData: { [key: string]: SummaryData } = {};
 
-  const renderSummaryCard = (title, amount) => (
+  categories.forEach((category) => {
+    summaryData[category] = useSummaryData(time, category, refreshTrigger).summaryData;
+  });
+
+  const renderSummaryCard = (title: string, amount: number) => (
     <View style={styles.summarycard} key={title}>
       <Text style={styles.summaryTtitle}>{title}</Text>
       <Text style={styles.summaryAmount}>₹ {amount}</Text>
@@ -110,8 +117,7 @@ export const NetSummaryComponent: React.FC<NetSummaryComponentProps> = ({
 };
 
 export const SeedsSummary = ({ formData }) => {
-  const isDark = true;
-  const styles = useStyles(isDark);
+  const styles = useStyles();
 
   if (!formData) return null;
 
@@ -220,8 +226,7 @@ export const SeedsSummary = ({ formData }) => {
 };
 
 export const PesticidesSummary = ({ formData }) => {
-  const isDark = true;
-  const styles = useStyles(isDark);
+  const styles = useStyles();
 
   if (!formData) return null;
 
@@ -326,8 +331,7 @@ export const PesticidesSummary = ({ formData }) => {
 };
 
 export const FertilizersSummary = ({ formData }) => {
-  const isDark = true;
-  const styles = useStyles(isDark);
+  const styles = useStyles();
 
   if (!formData) return null;
 

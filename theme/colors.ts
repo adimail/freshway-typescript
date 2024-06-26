@@ -16,6 +16,6 @@ const colors = {
   primaryText: '#2e2e2d',
   lightyellow: '#ffffe0',
   black: '#000000',
-}
+};
 
-export default colors
+export default colors;

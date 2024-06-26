@@ -157,7 +157,6 @@ export default function SeedsView() {
         showToast({
           title: `${formData.crop} Stock added of ${formData.totalWeight} Kgs.`,
           body: `Total Cost ${formData.totalCost}`,
-          isDark,
         });
         setRefreshTrigger((prev) => prev + 1); // Trigger summary data refresh
       })
@@ -247,28 +246,28 @@ export default function SeedsView() {
               <SelectField
                 label="Season"
                 selectedValue={formData.season}
-                onValueChange={(value) => handleInputChange('season', value)}
+                onValueChange={(value: string) => handleInputChange('season', value)}
                 data={['Kharif', 'Rabi', 'Summer']}
               />
 
               <SelectField
                 label="Crop"
                 selectedValue={formData.crop}
-                onValueChange={(value) => handleInputChange('crop', value)}
+                onValueChange={(value: string) => handleInputChange('crop', value)}
                 data={seedsData.crops || ['Default']}
               />
 
               <SelectField
                 label="Variety"
                 selectedValue={formData.variety}
-                onValueChange={(value) => handleInputChange('variety', value)}
+                onValueChange={(value: string) => handleInputChange('variety', value)}
                 data={seedsData.variety || ['Default']}
               />
 
               <SelectField
                 label="Company"
                 selectedValue={formData.company}
-                onValueChange={(value) => handleInputChange('company', value)}
+                onValueChange={(value: string) => handleInputChange('company', value)}
                 data={['farmer', ...(seedsData.company || ['Default'])]}
               />
 
@@ -355,7 +354,9 @@ export default function SeedsView() {
                     value={formData.pricePerUnit}
                     onChangeText={(text) => handlePriceChange('pricePerUnit', text)}
                     keyboardType="numeric"
-                    editable={formData.quantity > 0 && formData.packingSize > 0}
+                    editable={
+                      parseFloat(formData.quantity) > 0 && parseFloat(formData.packingSize) > 0
+                    }
                   />
                   <Text style={[{ color: 'white' }]}>Price per unit/bag</Text>
                 </View>
@@ -375,7 +376,9 @@ export default function SeedsView() {
                     value={formData.purchasePrice}
                     onChangeText={(text) => handlePriceChange('purchasePrice', text)}
                     keyboardType="numeric"
-                    editable={formData.quantity > 0 && formData.packingSize > 0}
+                    editable={
+                      parseFloat(formData.quantity) > 0 && parseFloat(formData.packingSize) > 0
+                    }
                   />
                   <Text style={[{ color: 'white' }]}>Price per Kg</Text>
                 </View>

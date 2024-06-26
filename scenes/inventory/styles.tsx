@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { fontSize, colors } from '../../theme';
 
-export const useStyles = (isDark: boolean) =>
+export const useStyles = () =>
   StyleSheet.create({
     main: {
       flex: 1,
@@ -27,13 +27,13 @@ export const useStyles = (isDark: boolean) =>
     },
     input: {
       height: 46,
-      borderColor: isDark ? colors.darkInput : '#BABABA',
+      borderColor: colors.darkInput,
       borderRadius: 10,
       backgroundColor: '#F2F3F4',
       width: 300,
       borderWidth: 1,
       paddingHorizontal: 10,
-      color: isDark ? colors.lightyellow : colors.darkInput,
+      color: colors.darkInput,
     },
     inlineInput: {
       height: 46,
@@ -41,7 +41,7 @@ export const useStyles = (isDark: boolean) =>
       borderRadius: 10,
       width: '50%',
       paddingLeft: 3,
-      color: isDark ? colors.lightyellow : colors.darkInput,
+      color: colors.darkInput,
     },
     button: {
       height: 35,
@@ -54,7 +54,7 @@ export const useStyles = (isDark: boolean) =>
       alignContent: 'center',
     },
     buttonText: {
-      color: isDark ? colors.darkInput : 'white',
+      color: colors.darkInput,
       borderColor: '#BABABA',
       fontSize: 16,
     },
@@ -88,13 +88,13 @@ export const useStyles = (isDark: boolean) =>
     },
     selectlistBoxStyles: {
       height: 45,
-      borderColor: isDark ? colors.darkInput : '#BABABA',
+      borderColor: colors.darkInput,
       borderRadius: 10,
       backgroundColor: '#F2F3F4',
       width: 300,
       borderWidth: 1,
       paddingHorizontal: 10,
-      color: isDark ? colors.lightyellow : colors.darkInput,
+      color: colors.lightyellow,
     },
     dateButton: {
       borderWidth: 1,
@@ -113,8 +113,8 @@ export const useStyles = (isDark: boolean) =>
     summaryTitle: {
       fontSize: 28,
       fontWeight: 'bold',
-      color: colors.lightPurple,
-      marginBottom: 30,
+      color: '#D49A42',
+      marginBottom: 50,
       textAlign: 'center',
     },
     summarySection: {
@@ -123,7 +123,7 @@ export const useStyles = (isDark: boolean) =>
     summarySectionTitle: {
       fontSize: 20,
       fontWeight: 'bold',
-      color: isDark ? colors.darkInput : colors.tertiary,
+      color: '#88C431',
       marginBottom: 5,
     },
     summaryTable: {
@@ -138,6 +138,6 @@ export const useStyles = (isDark: boolean) =>
     },
     summaryCell: {
       fontSize: 16,
-      color: isDark ? colors.lightyellow : colors.darkPurple,
+      color: colors.lightyellow,
     },
   });

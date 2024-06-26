@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginVertical: 18,
   },
   table: {

@@ -53,11 +53,9 @@ export default function Post() {
             );
           }
         } catch (error) {
-          console.error('Error fetching categories:', error.message);
           showToast({
             title: 'Error',
             body: 'Failed to fetch categories. Please try again.',
-            isDark,
           });
         }
       }
@@ -112,7 +110,6 @@ export default function Post() {
         showToast({
           title: 'Stack Overflow',
           body: 'You can add up to 9 max categories',
-          isDark,
         });
         return;
       }
@@ -151,7 +148,6 @@ export default function Post() {
         showToast({
           title: 'Category Added',
           body: newCategory,
-          isDark,
         });
 
         setNewCategory('');
@@ -160,7 +156,6 @@ export default function Post() {
         showToast({
           title: 'Error',
           body: 'Failed to add category. Please try again.',
-          isDark,
         });
       }
     }

@@ -1,9 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { Text, View, ScrollView, RefreshControl } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { colors } from '../../theme';
 
-import CustomSwitch from '../../components/toggleSwitch';
 import { collection, getDocs } from 'firebase/firestore';
 import { firestore } from '../../firebase/config';
 import { HomeTitleContext } from '../../context/HomeTitleContext';
@@ -21,9 +20,7 @@ export default function InventoryMonth({ route }) {
     setTitle(`${month} Inventory History`);
   });
 
-  const [type, setType] = useState('All');
   const [data, setData] = useState([]);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -34,35 +31,19 @@ export default function InventoryMonth({ route }) {
     try {
       let promises = [];
 
-      if (type === 'All') {
-        promises = ['seeds', 'pesticides', 'fertilizers'].map(async (collectionName) => {
-          const collectionRef = collection(
-            firestore,
-            `inventory-${userData.id}`,
-            month,
-            collectionName
-          );
-          const snapshot = await getDocs(collectionRef);
-          return snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-        });
-      } else {
+      promises = ['seeds', 'pesticides', 'fertilizers'].map(async (collectionName) => {
         const collectionRef = collection(
           firestore,
           `inventory-${userData.id}`,
           month,
-          type.toLowerCase()
+          collectionName
         );
         const snapshot = await getDocs(collectionRef);
-        promises.push(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
-        );
-      }
+        return snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+      });
 
       const results = await Promise.all(promises);
       const combinedData = results.flat();
@@ -70,54 +51,13 @@ export default function InventoryMonth({ route }) {
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
-      setIsRefreshing(false);
       setIsLoading(false);
     }
   };
 
-  const onSelectSwitch = (value) => {
-    setType(value);
-  };
-
-  const onRefresh = () => {
-    setIsRefreshing(true);
-    fetchInventoryData();
-  };
-
   return (
     <ScreenTemplate>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ paddingTop: 20 }}
-        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}>
-        <View
-          style={{
-            alignItems: 'center',
-            paddingBottom: 10,
-            width: 300,
-            alignSelf: 'center',
-          }}>
-          <CustomSwitch
-            roundCorner
-            options={['All', 'Seeds', 'Pesticides', 'Fertilizers']}
-            onSelectSwitch={onSelectSwitch}
-            selectionColor="#1C2833"
-            height={38}
-            borderRadius={10}
-          />
-        </View>
-        <View style={styles.content}>
-          <View style={{ width: '100%', alignItems: 'center' }}>
-            <View
-              style={[
-                styles.separator,
-                {
-                  backgroundColor: isDark ? 'white' : 'black',
-                },
-              ]}
-            />
-          </View>
-        </View>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ paddingTop: 20 }}>
         {isLoading ? (
           <Text style={[styles.title, { color: isDark ? 'white' : 'black' }]}>
             Fetching data from cloud ☁️
