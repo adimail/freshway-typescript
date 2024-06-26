@@ -385,7 +385,7 @@ export default function ThisMonthHistory() {
                           ]}
                           key={log.id}
                           onLongPress={() => {
-                            Vibration.vibrate(50);
+                            Vibration.vibrate(20);
                             setSelectedLog(log);
                           }}>
                           <View style={styles.column}>

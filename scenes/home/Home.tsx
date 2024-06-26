@@ -136,11 +136,22 @@ export default function Home() {
   };
 
   const NavigateToCategories = () => {
-    navigation.navigate('ModalStacks');
+    navigation.navigate('ModalStacks', {
+      screen: 'Post',
+      params: {
+        from: 'Home screen',
+      },
+    });
   };
 
   const NavigateToQuickAdd = () => {
-    navigation.navigate('ModalStacks');
+    navigation.navigate('ModalStacks', {
+      screen: 'QuickAdd',
+      params: {
+        data: userData,
+        from: 'Home screen',
+      },
+    });
   };
 
   useLayoutEffect(() => {
@@ -210,11 +221,7 @@ export default function Home() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.primary]} />
         }>
         <View style={[styles.top]}>
-          <TouchableOpacity
-            style={styles.container}
-            onPress={() => {
-              navigation.navigate('History');
-            }}>
+          <TouchableOpacity style={styles.container}>
             <Card
               title="Current month aggregate"
               amount={type === 'Credit' ? CurrentMonthCredit : CurrentMonthExpense}
@@ -329,7 +336,7 @@ export default function Home() {
           data={QuickAddData}
           userData={userData}
           setCurrentMonthExpense={setCurrentMonthExpense}
-          NavigateToQuickAdd={NavigateToQuickAdd(navigation)}
+          NavigateToQuickAdd={NavigateToQuickAdd}
         />
 
         <View style={[styles.separator, { marginVertical: 30 }]} />
