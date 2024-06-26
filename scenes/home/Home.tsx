@@ -39,7 +39,7 @@ export default function Home() {
   const [name, setName] = useState('Customer');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState(0);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date>(new Date());
   const [type, setType] = useState('Sell');
   const [category, setCategory] = useState('');
 
@@ -130,7 +130,7 @@ export default function Home() {
         display="default"
         maximumDate={new Date()}
         minimumDate={minimumDate}
-        onChange={handleDateChange}
+        onChange={(selectedDate) => handleDateChange(selectedDate)}
       />
     );
   };
@@ -161,7 +161,7 @@ export default function Home() {
           <FontAwesome
             name="folder-open"
             size={27}
-            onPress={() => NavigateToCategories(navigation)}
+            onPress={() => NavigateToCategories()}
             color={colors.lightPurple}
           />
         </View>
@@ -296,7 +296,7 @@ export default function Home() {
               style={[styles.input]}
               placeholder="Enter Amount"
               keyboardType="numeric"
-              onChangeText={(text) => setAmount(text)}
+              onChangeText={(text: string) => setAmount(parseFloat(text))}
             />
 
             <TextInput

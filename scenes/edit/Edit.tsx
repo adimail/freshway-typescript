@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Text, View, StyleSheet, Platform } from 'react-native';
+import { Text, View, StyleSheet, Platform, Alert } from 'react-native';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import Button from '../../components/Button';
 import { Avatar } from '@rneui/themed';
@@ -11,33 +11,45 @@ import TextInputBox from '../../components/TextInputBox';
 import { firestore, storage, auth } from '../../firebase/config';
 import { doc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { colors, fontSize } from '../../theme';
 import { UserDataContext } from '../../context/UserDataContext';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { showToast } from '../../utils/ShowToast';
+import { UserData } from '../../types/user';
 
-export default function Edit() {
+interface RootStackParamList {
+  ModalStacks: {
+    screen: 'InventoryMonth';
+    params: {
+      month: string;
+      userData: UserData;
+    };
+  };
+}
+
+const Edit: React.FC = () => {
   const { userData } = useContext(UserDataContext)!;
-  const navigation = useNavigation();
-  const [fullName, setFullName] = useState(userData.fullName);
-  const [progress, setProgress] = useState('');
-  const [avatar, setAvatar] = useState(userData.avatar);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [spinner, setSpinner] = useState(false);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [fullName, setFullName] = useState<string>(userData.fullName);
+  const [progress, setProgress] = useState<string>('');
+  const [avatar, setAvatar] = useState<string>(userData.avatar);
+  const [currentPassword, setCurrentPassword] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [spinner, setSpinner] = useState<boolean>(false);
+
   const colorScheme = {
     text: colors.white,
     progress: styles.darkprogress,
   };
 
-  const ImageChoiceAndUpload = async () => {
+  const ImageChoiceAndUpload = async (): Promise<void> => {
     try {
       if (Platform.OS === 'ios') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
-          alert('Permission is required for use.');
+          Alert.alert('Permission is required for use.');
           return;
         }
       }
@@ -47,10 +59,10 @@ export default function Edit() {
         allowsMultipleSelection: false,
       });
       if (!result.canceled) {
-        const actions = [];
+        const actions: ImageManipulator.Action[] = [];
         actions.push({ resize: { width: 300 } });
         const manipulatorResult = await ImageManipulator.manipulateAsync(
-          result.assets[0].uri,
+          result.assets && result.assets.length > 0 ? result.assets[0].uri : '',
           actions,
           {
             compress: 0.4,
@@ -58,18 +70,18 @@ export default function Edit() {
         );
         const localUri = await fetch(manipulatorResult.uri);
         const localBlob = await localUri.blob();
-        const filename = userData.id + new Date().getTime();
+        const filename = `${userData.id}${new Date().getTime()}`;
         const storageRef = ref(storage, `avatar/${userData.id}/${filename}`);
         const uploadTask = uploadBytesResumable(storageRef, localBlob);
         uploadTask.on(
           'state_changed',
           (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setProgress(`${parseInt(progress)}%`);
+            setProgress(`${parseInt(progress.toString())}%`);
           },
           (error) => {
             console.log(error);
-            alert('Upload failed.');
+            Alert.alert('Upload failed.');
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -80,12 +92,12 @@ export default function Edit() {
         );
       }
     } catch (e) {
-      console.log('error', e.message);
-      alert('The size may be too much.');
+      console.log(e);
+      Alert.alert('The size may be too much.');
     }
   };
 
-  const profileUpdate = async () => {
+  const profileUpdate = async (): Promise<void> => {
     try {
       const data = {
         id: userData.id,
@@ -97,21 +109,21 @@ export default function Edit() {
       await updateDoc(usersRef, data);
       navigation.goBack();
     } catch (e) {
-      alert(e);
+      console.log(e);
     }
   };
 
-  const onUpdatePassword = async () => {
+  const onUpdatePassword = async (): Promise<void> => {
     if (password !== confirmPassword) {
-      alert("Passwords don't match.");
+      Alert.alert("Passwords don't match.");
       return;
     }
     try {
       setSpinner(true);
       const user = auth.currentUser;
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
-      await reauthenticateWithCredential(user, credential);
-      await updatePassword(user, password);
+      const credential = EmailAuthProvider.credential(user!.email!, currentPassword);
+      await reauthenticateWithCredential(user!, credential);
+      await updatePassword(user!, password);
       showToast({
         title: 'Password changed',
         body: 'Your password has changed.',
@@ -121,7 +133,6 @@ export default function Edit() {
       setConfirmPassword('');
     } catch (e) {
       console.log(e);
-      alert(e);
     } finally {
       setSpinner(false);
     }
@@ -140,7 +151,7 @@ export default function Edit() {
         <Text style={[styles.field, { color: colorScheme.text }]}>Name:</Text>
         <TextInputBox
           placeholder={fullName}
-          onChangeText={(text) => setFullName(text)}
+          onChangeText={(text: string) => setFullName(text)}
           value={fullName}
           autoCapitalize="none"
         />
@@ -152,21 +163,21 @@ export default function Edit() {
           <TextInputBox
             secureTextEntry
             placeholder="Current Password"
-            onChangeText={(text) => setCurrentPassword(text)}
+            onChangeText={(text: string) => setCurrentPassword(text)}
             value={currentPassword}
             autoCapitalize="none"
           />
           <TextInputBox
             secureTextEntry
             placeholder="New Password"
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={(text: string) => setPassword(text)}
             value={password}
             autoCapitalize="none"
           />
           <TextInputBox
             secureTextEntry
             placeholder="Confirm New Password"
-            onChangeText={(text) => setConfirmPassword(text)}
+            onChangeText={(text: string) => setConfirmPassword(text)}
             value={confirmPassword}
             autoCapitalize="none"
           />
@@ -185,7 +196,7 @@ export default function Edit() {
       />
     </ScreenTemplate>
   );
-}
+};
 
 const styles = StyleSheet.create({
   progress: {
@@ -216,3 +227,5 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
 });
+
+export default Edit;
