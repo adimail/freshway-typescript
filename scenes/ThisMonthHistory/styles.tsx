@@ -1,4 +1,4 @@
-import { fontSize } from '../../theme';
+import { colors, fontSize } from '../../theme';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -56,6 +56,7 @@ export const styles = StyleSheet.create({
     height: 1,
     width: '90%',
     alignSelf: 'center',
+    backgroundColor: colors.white,
   },
   column: {
     width: '75%',
@@ -67,7 +68,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    marginVertical: 18,
   },
   table: {
     width: '100%',

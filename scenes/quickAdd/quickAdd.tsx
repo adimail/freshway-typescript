@@ -17,8 +17,6 @@ export default function QuickAdd() {
   const { setTitle } = useContext(HomeTitleContext);
   const { userData } = useContext(UserDataContext)!;
 
-  const isDark = true;
-
   const SellData = userData && userData.Sell;
 
   // Quick Add information
@@ -79,7 +77,6 @@ export default function QuickAdd() {
       showToast({
         title: 'Success',
         body: 'New Quick Add Generated',
-        isDark,
       });
 
       setName('');
@@ -92,7 +89,6 @@ export default function QuickAdd() {
       showToast({
         title: 'Error',
         body: 'Failed to generate Quick Add. Please try again later.',
-        isDark,
       });
     }
   };
@@ -168,7 +164,7 @@ export default function QuickAdd() {
               }}
               dropdownTextStyles={{ fontSize: 14, color: 'white' }}
               dropdownStyles={{ backgroundColor: '#1c2833ba' }}
-              setSelected={(value) => {
+              setSelected={(value: string) => {
                 setCategory(value);
               }}
               search={false}

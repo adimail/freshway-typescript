@@ -135,13 +135,11 @@ export default function Home() {
     );
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const NavigateToCategories = (navigation: any) => {
+  const NavigateToCategories = () => {
     navigation.navigate('ModalStacks');
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const NavigateToQuickAdd = (navigation: any) => {
+  const NavigateToQuickAdd = () => {
     navigation.navigate('ModalStacks');
   };
 
@@ -179,7 +177,7 @@ export default function Home() {
     }
 
     // Check if amount contains only numbers
-    const isValidAmount = /^\d+$/.test(amount);
+    const isValidAmount = /^\d+$/.test(amount.toString());
 
     if (!isValidAmount) {
       Alert.alert('Error', 'Please enter a valid amount containing only numbers.');
@@ -193,7 +191,7 @@ export default function Home() {
           body: name,
         });
 
-        setAmount('');
+        setAmount(0);
         setDescription('');
         setName('Customer');
       })

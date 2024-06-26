@@ -16,14 +16,16 @@ const toastConfig = {
     Overwrite 'success' type,
     by modifying the existing `BaseToast` component
   */
-  success: () => {
+  success: (props) => {
+    const isDark = true;
     const styles = {
-      backgroundColor: colors.white,
-      text1Color: colors.black,
-      text2Color: colors.darkPurple,
+      backgroundColor: isDark ? colors.darkInput : colors.white,
+      text1Color: isDark ? colors.white : colors.black,
+      text2Color: isDark ? colors.lightyellow : colors.darkPurple,
     };
     return (
       <BaseToast
+        {...props}
         style={{ borderLeftColor: colors.primary }}
         contentContainerStyle={{
           paddingHorizontal: 15,
@@ -46,8 +48,9 @@ const toastConfig = {
     Overwrite 'error' type,
     by modifying the existing `ErrorToast` component
   */
-  error: () => (
+  error: (props) => (
     <ErrorToast
+      {...props}
       text1Style={{
         fontSize: 17,
       }}

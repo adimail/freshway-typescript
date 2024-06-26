@@ -23,9 +23,9 @@ import { styles } from './styles';
 export default function ThisMonthHistory() {
   const { userData } = useContext(UserDataContext)!;
   const [type, setType] = useState('Sell');
-  const [expenseData, setExpenseData] = useState(null);
-  const [CreditData, setCreditData] = useState(null);
-  const [selectedLog, setSelectedLog] = useState(null);
+  const [expenseData, setExpenseData] = useState();
+  const [CreditData, setCreditData] = useState();
+  const [selectedLog, setSelectedLog] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [filter, setFilter] = useState('Date');
   const [categoryfilter, setCategoryFilter] = useState('All');
@@ -161,45 +161,47 @@ export default function ThisMonthHistory() {
   };
 
   const deleteLog = async () => {
-    try {
-      const batch = writeBatch(firestore);
+    if (selectedLog) {
+      try {
+        const batch = writeBatch(firestore);
 
-      // Delete transaction directly without fetching it
-      const transactionRef = doc(
-        firestore,
-        `transactions-${userData.id}/${type}/${CurrentMonth}`,
-        selectedLog.id
-      );
-      batch.delete(transactionRef);
+        // Delete transaction directly without fetching it
+        const transactionRef = doc(
+          firestore,
+          `transactions-${userData.id}/${type}/${CurrentMonth}`,
+          selectedLog.id
+        );
+        batch.delete(transactionRef);
 
-      // Update summary by subtracting the amount of the deleted log
-      const summaryRef = doc(
-        firestore,
-        `summaries-${userData.id}`,
-        type,
-        CurrentMonth,
-        'Aggregate'
-      );
-      const summarySnapshot = await getDoc(summaryRef);
-      if (summarySnapshot.exists()) {
-        const summaryData = summarySnapshot.data();
-        const currentSum = summaryData.sum || 0;
-        const updatedSum = currentSum - selectedLog.amount;
-        batch.update(summaryRef, { sum: updatedSum });
+        // Update summary by subtracting the amount of the deleted log
+        const summaryRef = doc(
+          firestore,
+          `summaries-${userData.id}`,
+          type,
+          CurrentMonth,
+          'Aggregate'
+        );
+        const summarySnapshot = await getDoc(summaryRef);
+        if (summarySnapshot.exists()) {
+          const summaryData = summarySnapshot.data();
+          const currentSum = summaryData.sum || 0;
+          const updatedSum = currentSum - selectedLog.amount;
+          batch.update(summaryRef, { sum: updatedSum });
+        }
+
+        await batch.commit();
+
+        showToast({
+          title: 'Log Deleted',
+          body: 'Data refreshed',
+        });
+
+        fetchDataForCurrentMonth();
+        fetchSummaryData('Sell');
+        fetchSummaryData('Credit');
+      } catch (error) {
+        console.error('Error deleting log:', error);
       }
-
-      await batch.commit();
-
-      showToast({
-        title: 'Log Deleted',
-        body: 'Data refreshed',
-      });
-
-      fetchDataForCurrentMonth();
-      fetchSummaryData('Sell');
-      fetchSummaryData('Credit');
-    } catch (error) {
-      console.error('Error deleting log:', error);
     }
   };
 
@@ -317,9 +319,7 @@ export default function ThisMonthHistory() {
               style={{
                 display: 'flex',
                 flexDirection: 'row',
-                gap: 30,
                 maxWidth: 300,
-                marginTop: 10,
                 alignItems: 'center',
               }}>
               <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>

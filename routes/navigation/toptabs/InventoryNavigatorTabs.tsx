@@ -33,7 +33,7 @@ export const InventoryNavigatorTabs = () => {
       headerRight: () => (
         <View style={{ paddingRight: 16 }}>
           <FontAwesome
-            name="plus-circle"
+            name="folder-open"
             size={27}
             onPress={() => NavigateToCategories(navigation)}
             color={colors.lightPurple}

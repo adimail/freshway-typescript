@@ -152,7 +152,6 @@ const ThisMonthInventoryHistory = () => {
       await batch.commit().then(() => {
         showToast({
           title: 'Log Deleted',
-          isDark,
         });
         setRefreshTrigger((prev) => prev + 1);
       });

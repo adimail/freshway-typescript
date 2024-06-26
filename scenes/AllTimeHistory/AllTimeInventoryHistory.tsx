@@ -11,7 +11,7 @@ export default function AllTimeInventoryHistory() {
   const navigation = useNavigation();
 
   const [monthsSinceJoined, setMonthsSinceJoined] = useState([]);
-  const joinedDate = userData.joined;
+  const joinedDate = userData.joined.toDate();
   const currentDate = new Date();
 
   const navigatetomonth = (monthName) => {
@@ -19,6 +19,7 @@ export default function AllTimeInventoryHistory() {
       screen: 'InventoryMonth',
       params: {
         month: monthName,
+        userData: userData,
       },
     });
   };
