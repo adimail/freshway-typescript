@@ -224,14 +224,12 @@ export default function PesticidesView() {
               />
               <SelectField
                 label="Pesticide name"
-                selectedValue={formData.name}
                 onValueChange={(value: string) => handleInputChange('name', value)}
                 data={pesticidesData.name || ['Default']}
               />
 
               <SelectField
                 label="Company"
-                selectedValue={formData.company}
                 onValueChange={(value: string) => handleInputChange('company', value)}
                 data={pesticidesData.company || ['Default']}
               />

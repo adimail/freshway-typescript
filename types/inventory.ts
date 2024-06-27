@@ -1,4 +1,4 @@
-interface FormBase {
+export interface FormBase {
   id?: string;
   name?: string;
   company: string;

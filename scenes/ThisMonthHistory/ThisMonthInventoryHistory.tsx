@@ -282,6 +282,11 @@ const ThisMonthInventoryHistory = () => {
                     Package Size
                   </Text>
                   <Text
+                    style={[styles.col4, { fontWeight: 'bold', fontSize: 15 }]}
+                    numberOfLines={1}>
+                    Quantity
+                  </Text>
+                  <Text
                     style={[styles.col3, { fontWeight: 'bold', fontSize: 15 }]}
                     numberOfLines={1}>
                     Cost Price
@@ -320,6 +325,9 @@ const ThisMonthInventoryHistory = () => {
                     </Text>
                     <Text style={[styles.col2]} numberOfLines={1}>
                       {log.packingSize} {log.state}
+                    </Text>
+                    <Text style={[styles.col4]} numberOfLines={1}>
+                      {log.quantity}
                     </Text>
                     <Text style={[styles.col3]} numberOfLines={1}>
                       ₹ {log.purchasePrice} {log.category === 'seeds' && '/Kg'}

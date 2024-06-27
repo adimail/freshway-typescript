@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { SummaryRow, renderSummarySection } from './utils';
+import { SummaryRow, RenderSummarySection } from './utils';
 import { useStyles } from './styles';
 
 import { colors } from '../../theme';
@@ -144,7 +144,7 @@ export const SeedsSummary = ({ formData }) => {
     <View style={styles.summaryContainer}>
       <Text style={styles.summaryTitle}>Summary</Text>
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'About Crop',
         <>
           <SummaryRow key="season" label="Season" value={season || '- '} />
@@ -155,7 +155,7 @@ export const SeedsSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Packaging',
         <>
           <SummaryRow key="packingSize" label="Packing Size (Kg)" value={packingSize || '- '} />
@@ -164,7 +164,7 @@ export const SeedsSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Price',
         <>
           <SummaryRow
@@ -180,7 +180,7 @@ export const SeedsSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Dates',
         <>
           <SummaryRow
@@ -213,7 +213,7 @@ export const SeedsSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Invoice',
         <>
           <SummaryRow key="totalWeight" label="Total Weight" value={totalWeight} />
@@ -251,7 +251,7 @@ export const PesticidesSummary = ({ formData }) => {
     <View style={styles.summaryContainer}>
       <Text style={styles.summaryTitle}>Summary</Text>
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'About Pesticide',
         <>
           <SummaryRow key="type" label="Type" value={type || '- '} />
@@ -261,7 +261,7 @@ export const PesticidesSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Packaging',
         <>
           <SummaryRow
@@ -274,7 +274,7 @@ export const PesticidesSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Price',
         <>
           <SummaryRow key="purchasePrice" label="Purchase Price" value={purchasePrice || '- '} />
@@ -282,7 +282,7 @@ export const PesticidesSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Dates',
         <>
           <SummaryRow
@@ -315,7 +315,7 @@ export const PesticidesSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Invoice',
         <>
           <SummaryRow key="totalCost" label="Total Purchase Cost" value={totalCost || '- '} />
@@ -355,7 +355,7 @@ export const FertilizersSummary = ({ formData }) => {
     <View style={styles.summaryContainer}>
       <Text style={styles.summaryTitle}>Summary</Text>
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'About Pesticide',
         <>
           <SummaryRow key="type" label="Type" value={type || '- '} />
@@ -364,7 +364,7 @@ export const FertilizersSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Packaging',
         <>
           <SummaryRow
@@ -377,7 +377,7 @@ export const FertilizersSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Price',
         <>
           <SummaryRow key="purchasePrice" label="Purchase Price" value={purchasePrice || '- '} />
@@ -385,7 +385,7 @@ export const FertilizersSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Dates',
         <>
           <SummaryRow
@@ -418,7 +418,7 @@ export const FertilizersSummary = ({ formData }) => {
         </>
       )}
 
-      {renderSummarySection(
+      {RenderSummarySection(
         'Invoice',
         <>
           <SummaryRow key="totalCost" label="Total Purchase Cost" value={totalCost || '- '} />

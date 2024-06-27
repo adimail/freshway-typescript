@@ -224,14 +224,12 @@ export default function FertilizersView() {
               />
               <SelectField
                 label="Fertilizer name"
-                selectedValue={formData.name}
                 onValueChange={(value: string) => handleInputChange('name', value)}
                 data={fertilizersData.name || ['Default']}
               />
 
               <SelectField
                 label="Company"
-                selectedValue={formData.company}
                 onValueChange={(value: string) => handleInputChange('company', value)}
                 data={fertilizersData.company || ['Default']}
               />

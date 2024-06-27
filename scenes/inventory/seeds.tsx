@@ -256,21 +256,18 @@ export default function SeedsView() {
 
               <SelectField
                 label="Crop"
-                selectedValue={formData.crop}
                 onValueChange={(value: string) => handleInputChange('crop', value)}
                 data={seedsData.crops || ['Default']}
               />
 
               <SelectField
                 label="Variety"
-                selectedValue={formData.variety}
                 onValueChange={(value: string) => handleInputChange('variety', value)}
                 data={seedsData.variety || ['Default']}
               />
 
               <SelectField
                 label="Company"
-                selectedValue={formData.company}
                 onValueChange={(value: string) => handleInputChange('company', value)}
                 data={['farmer', ...(seedsData.company || ['Default'])]}
               />

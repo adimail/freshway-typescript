@@ -400,32 +400,42 @@ export default function ThisMonthHistory() {
                     ) : (
                       dataToDisplay.map((log) => (
                         <TouchableOpacity
-                          style={[
-                            styles.log,
-                            {
-                              backgroundColor: colors.primaryText,
-                            },
-                          ]}
+                          style={{
+                            backgroundColor: colors.primaryText,
+                            marginVertical: 5,
+                            paddingVertical: 5,
+                            marginHorizontal: 5,
+                            paddingHorizontal: 20,
+                            borderRadius: 20,
+                            borderColor: 'white',
+                            borderWidth: 0.3,
+                            justifyContent: 'center',
+                          }}
                           key={log.id}
                           onLongPress={() => {
                             Vibration.vibrate(20);
                             setSelectedLog(log);
                           }}>
-                          <View style={styles.column}>
-                            <Text style={[styles.title]} numberOfLines={1}>
-                              {log.title}
-                            </Text>
-                            <Text style={styles.date}>
-                              {new Date(log.date.seconds * 1000).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: '2-digit',
-                                weekday: 'short',
-                              })}
-                            </Text>
+                          <View style={[styles.log]}>
+                            <View style={styles.column}>
+                              <Text style={[styles.title]} numberOfLines={1}>
+                                {log.title}
+                              </Text>
+                              <Text style={styles.date}>
+                                {new Date(log.date.seconds * 1000).toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: '2-digit',
+                                  weekday: 'short',
+                                })}
+                              </Text>
+                            </View>
+                            <View>
+                              <Text style={styles.amount}>₹ {log.amount}</Text>
+                            </View>
                           </View>
-                          <View>
-                            <Text style={styles.amount}>₹ {log.amount}</Text>
-                          </View>
+                          {log.description !== '' && (
+                            <Text style={{ fontSize: 10, color: 'white' }}>{log.description}</Text>
+                          )}
                         </TouchableOpacity>
                       ))
                     )}

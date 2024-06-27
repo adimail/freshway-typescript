@@ -108,6 +108,11 @@ export default function InventoryMonth({ route }) {
                     Package Size
                   </Text>
                   <Text
+                    style={[styles.col4, { fontWeight: 'bold', fontSize: 15 }]}
+                    numberOfLines={1}>
+                    Quantity
+                  </Text>
+                  <Text
                     style={[styles.col3, { fontWeight: 'bold', fontSize: 15 }]}
                     numberOfLines={1}>
                     Cost Price
@@ -129,7 +134,11 @@ export default function InventoryMonth({ route }) {
                     style={[
                       styles.log,
                       {
-                        backgroundColor: isDark ? colors.primaryText : colors.primary,
+                        backgroundColor: colors.primaryText,
+                        paddingVertical: 5,
+                        marginHorizontal: 5,
+                        paddingHorizontal: 20,
+                        justifyContent: 'center',
                       },
                     ]}
                     key={log.id}>
@@ -145,6 +154,9 @@ export default function InventoryMonth({ route }) {
                     </Text>
                     <Text style={[styles.col2]} numberOfLines={1}>
                       {log.packingSize} {log.state}
+                    </Text>
+                    <Text style={[styles.col4]} numberOfLines={1}>
+                      {log.quantity}
                     </Text>
                     <Text style={[styles.col3]} numberOfLines={1}>
                       ₹ {log.purchasePrice} {log.category === 'seeds' && '/Kg'}

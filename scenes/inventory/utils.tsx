@@ -1,11 +1,12 @@
 /* eslint-disable indent */
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { useStyles } from './styles';
 import { colors } from '../../theme';
+import { FormBase } from '../../types/inventory';
 
-export const renderSummarySection = (title, content) => {
+export const RenderSummarySection = (title: string, content: React.ReactNode) => {
   const styles = useStyles();
 
   return (
@@ -71,7 +72,7 @@ export const pesticidesinitialFormData = {
   category: 'pesticides',
 };
 
-export const SummaryRow = ({ label, value }) => {
+export const SummaryRow = ({ label, value }: { label: string; value: string }) => {
   const styles = useStyles();
 
   return (
@@ -82,25 +83,31 @@ export const SummaryRow = ({ label, value }) => {
   );
 };
 
-export const SelectField = ({ label, selectedValue, onValueChange, data }) => {
-  const isDark = true;
-  const styles = useStyles(isDark);
+export const SelectField = ({
+  label,
+  onValueChange,
+  data,
+}: {
+  label: string;
+  onValueChange: (value: string) => void;
+  data: string[];
+}) => {
+  const styles = useStyles();
 
   return (
     <SelectList
       boxStyles={styles.selectlistBoxStyles}
       dropdownTextStyles={{ fontSize: 14, color: 'white' }}
       dropdownStyles={styles.selectlistDropdown}
-      setSelected={(value) => onValueChange(value)}
+      setSelected={(value: string) => onValueChange(value)}
       search={false}
       data={data}
-      value={selectedValue}
       placeholder={`Select ${label}`}
     />
   );
 };
 
-export const isSameDay = (date1, date2) => {
+export const isSameDay = (date1: Date, date2: Date) => {
   return (
     date1.getFullYear() === date2.getFullYear() &&
     date1.getMonth() === date2.getMonth() &&
@@ -108,9 +115,14 @@ export const isSameDay = (date1, date2) => {
   );
 };
 
-export const SubmitData = ({ formData, handleSubmitData }) => {
-  const isDark = true;
-  const styles = useStyles(isDark);
+export const SubmitData = ({
+  formData,
+  handleSubmitData,
+}: {
+  formData: FormBase;
+  handleSubmitData: () => void;
+}) => {
+  const styles = useStyles();
 
   return (
     <View
