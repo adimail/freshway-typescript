@@ -21,21 +21,21 @@ import { SummaryCard } from '../../components/expenseCard';
 import { MaterialIcons } from '@expo/vector-icons';
 import Section from '../../components/inventorysection';
 import { useStyles } from './styles';
+import CustomSwitch from '../../components/toggleSwitch';
 import { useSummaryData } from './useSummaryData';
 import { SeedsSummary } from './summary';
+import { SeedsInitialFormData } from '../../types/inventory';
 
 export default function SeedsView() {
   const { userData } = useContext(UserDataContext)!;
+  const styles = useStyles();
 
-  const isDark = true;
-  const styles = useStyles(isDark);
-
-  const [refreshing, setRefreshing] = useState(false);
-  const [formData, setFormData] = useState(seedsinitialFormData);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showManufacturingDatePicker, setShowManufacturingDatePicker] = useState(false);
-  const [showExpiryDatePicker, setShowExpiryDatePicker] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [formData, setFormData] = useState<SeedsInitialFormData>(seedsinitialFormData);
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [showManufacturingDatePicker, setShowManufacturingDatePicker] = useState<boolean>(false);
+  const [showExpiryDatePicker, setShowExpiryDatePicker] = useState<boolean>(false);
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
   const monthYear = new Date().toLocaleDateString('en-GB', {
     month: 'short',
@@ -54,7 +54,7 @@ export default function SeedsView() {
     }, 200);
   };
 
-  const handleDateChange = (selectedDate, key) => {
+  const handleDateChange = (selectedDate: Date, key: string) => {
     if (selectedDate) {
       setFormData({ ...formData, [key]: selectedDate });
     }
@@ -75,7 +75,7 @@ export default function SeedsView() {
     }
   };
 
-  const renderDatePicker = (value, key) => {
+  const renderDatePicker = (value: Date, key: string) => {
     const isDatePickerVisible =
       showDatePicker ||
       (key === 'manufacturingDate' && showManufacturingDatePicker) ||
@@ -94,11 +94,11 @@ export default function SeedsView() {
     return null;
   };
 
-  const handleInputChange = (key, value) => {
+  const handleInputChange = (key: string, value: string) => {
     setFormData({ ...formData, [key]: value });
   };
 
-  const recalculate = (data) => {
+  const recalculate = (data: SeedsInitialFormData): SeedsInitialFormData => {
     const purchasePrice = parseFloat(data.purchasePrice) || 0;
     const quantity = parseFloat(data.quantity) || 0;
     const packingSize = parseFloat(data.packingSize) || 0;
@@ -124,14 +124,14 @@ export default function SeedsView() {
 
     return {
       ...data,
-      pricePerUnit: pricePerUnit.toFixed(0),
+      pricePerUnit: pricePerUnit.toFixed(2),
       totalCost: totalCost.toFixed(2),
       estimatedprofit: estimatedProfit.toFixed(2),
-      totalWeight: packingSize * quantity,
+      totalWeight: (packingSize * quantity).toString(),
     };
   };
 
-  const handlePriceChange = (key, value) => {
+  const handlePriceChange = (key: string, value: string) => {
     const updatedData = { ...formData, [key]: value };
     setFormData(recalculate(updatedData));
   };
@@ -181,13 +181,13 @@ export default function SeedsView() {
       manufacturingDate: new Date(),
       expiryDate: new Date(),
       pricePerUnit: '',
-      totalCost: 0,
-      estimatedprofit: 0,
-      totalWeight: 0,
+      totalCost: '0',
+      estimatedprofit: '0',
+      totalWeight: '0',
     }));
   };
 
-  const isSameDay = (date1, date2) => {
+  const isSameDay = (date1: Date, date2: Date) => {
     return (
       date1.getFullYear() === date2.getFullYear() &&
       date1.getMonth() === date2.getMonth() &&
@@ -243,11 +243,15 @@ export default function SeedsView() {
 
             {/* About crop */}
             <Section>
-              <SelectField
-                label="Season"
-                selectedValue={formData.season}
-                onValueChange={(value: string) => handleInputChange('season', value)}
-                data={['Kharif', 'Rabi', 'Summer']}
+              <CustomSwitch
+                roundCorner
+                options={['Kharif', 'Rabi', 'Summer']}
+                onSelectSwitch={(value: string) => {
+                  handleInputChange('season', value);
+                }}
+                height={46}
+                selectionColor={colors.darkPurple}
+                borderRadius={100}
               />
 
               <SelectField
@@ -419,11 +423,11 @@ export default function SeedsView() {
                 borderTopWidth: 1,
               }}>
               <View style={{ width: '40%' }}>
-                <Text style={styles.datePickerButton}>Manufacturing Date</Text>
+                <Text>Manufacturing Date</Text>
                 <TouchableOpacity
                   onPress={() => setShowManufacturingDatePicker(true)}
                   style={styles.dateButton}>
-                  <Text style={styles.datePickerText}>
+                  <Text>
                     {formData.manufacturingDate.toLocaleDateString('en-GB', {
                       month: 'short',
                       year: 'numeric',
@@ -435,11 +439,11 @@ export default function SeedsView() {
               </View>
 
               <View style={{ width: '40%' }}>
-                <Text style={styles.title}>Expiry Date</Text>
+                <Text>Expiry Date</Text>
                 <TouchableOpacity
                   onPress={() => setShowExpiryDatePicker(true)}
                   style={styles.dateButton}>
-                  <Text style={styles.title}>
+                  <Text>
                     {formData.expiryDate.toLocaleDateString('en-GB', {
                       month: 'short',
                       year: 'numeric',

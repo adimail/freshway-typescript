@@ -11,7 +11,15 @@ import {
 } from 'react-native';
 import { colors } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { collection, getDocs, doc, getDoc, writeBatch } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  writeBatch,
+  DocumentData,
+  QuerySnapshot,
+} from 'firebase/firestore';
 import ScreenTemplate from '../../components/ScreenTemplate';
 import { UserDataContext } from '../../context/UserDataContext';
 import CustomSwitch from '../../components/toggleSwitch';
@@ -20,18 +28,30 @@ import Card from '../../components/expenseCard';
 import { showToast } from '../../utils/ShowToast';
 import { styles } from './styles';
 
+type Log = {
+  id: string;
+  title: string;
+  date: { seconds: number };
+  amount: number;
+  category: string;
+};
+
+type SummaryData = {
+  sum: number;
+};
+
 export default function ThisMonthHistory() {
   const { userData } = useContext(UserDataContext)!;
-  const [type, setType] = useState('Sell');
-  const [expenseData, setExpenseData] = useState();
-  const [CreditData, setCreditData] = useState();
-  const [selectedLog, setSelectedLog] = useState();
+  const [type, setType] = useState<'Sell' | 'Credit'>('Sell');
+  const [expenseData, setExpenseData] = useState<Log[] | undefined>();
+  const [CreditData, setCreditData] = useState<Log[] | undefined>();
+  const [selectedLog, setSelectedLog] = useState<Log | undefined>();
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [filter, setFilter] = useState('Date');
+  const [filter, setFilter] = useState<'Date' | 'Amount'>('Date');
   const [categoryfilter, setCategoryFilter] = useState('All');
   const [CreditCategories, setCreditCategories] = useState(['All']);
   const [expenseCategories, setExpenseCategories] = useState(['All']);
-  const [order, setOrder] = useState('desc');
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc');
   const [isLoading, setIsLoading] = useState(false);
 
   const CurrentMonth = new Date().toLocaleDateString('en-GB', {
@@ -42,8 +62,8 @@ export default function ThisMonthHistory() {
   const [totalExpense, setTotalExpense] = useState(0);
   const [totalCredit, setTotalCredit] = useState(0);
 
-  const extractUniqueCategories = (logs) => {
-    const categories = logs.reduce((uniqueCategories, log) => {
+  const extractUniqueCategories = (logs: Log[]) => {
+    const categories = logs.reduce<string[]>((uniqueCategories, log) => {
       if (!uniqueCategories.includes(log.category)) {
         return [...uniqueCategories, log.category];
       }
@@ -63,7 +83,7 @@ export default function ThisMonthHistory() {
     }
   }, [CreditData, expenseData]);
 
-  const fetchSummaryData = async (dataType) => {
+  const fetchSummaryData = async (dataType: 'Sell' | 'Credit') => {
     try {
       const summaryRef = doc(
         firestore,
@@ -74,7 +94,7 @@ export default function ThisMonthHistory() {
       );
       const summarySnapshot = await getDoc(summaryRef);
       if (summarySnapshot.exists()) {
-        const summaryData = summarySnapshot.data();
+        const summaryData = summarySnapshot.data() as SummaryData;
         if (dataType === 'Sell') {
           setTotalExpense(summaryData.sum || 0);
         } else if (dataType === 'Credit') {
@@ -103,20 +123,20 @@ export default function ThisMonthHistory() {
         CurrentMonth
       );
 
-      const [expenseSnapshot, CreditSnapshot] = await Promise.all([
-        getDocs(expenseCollectionRef),
-        getDocs(CreditCollectionRef),
-      ]);
+      const [expenseSnapshot, CreditSnapshot]: [
+        QuerySnapshot<DocumentData>,
+        QuerySnapshot<DocumentData>,
+      ] = await Promise.all([getDocs(expenseCollectionRef), getDocs(CreditCollectionRef)]);
 
       const expenses = expenseSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Log[];
 
       const Credits = CreditSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Log[];
 
       setExpenseData(expenses);
       setCreditData(Credits);
@@ -149,14 +169,14 @@ export default function ThisMonthHistory() {
     fetchSummaryData('Credit');
   }, []);
 
-  const onSelectSwitch = (value) => {
+  const onSelectSwitch = (value: 'Sell' | 'Credit') => {
     setType(value);
   };
 
-  const onSelectFilter = (value) => {
+  const onSelectFilter = (value: 'Date' | 'Amount') => {
     setFilter(value);
   };
-  const onSelectCategoryFilter = (value) => {
+  const onSelectCategoryFilter = (value: string) => {
     setCategoryFilter(value);
   };
 
@@ -183,7 +203,7 @@ export default function ThisMonthHistory() {
         );
         const summarySnapshot = await getDoc(summaryRef);
         if (summarySnapshot.exists()) {
-          const summaryData = summarySnapshot.data();
+          const summaryData = summarySnapshot.data() as SummaryData;
           const currentSum = summaryData.sum || 0;
           const updatedSum = currentSum - selectedLog.amount;
           batch.update(summaryRef, { sum: updatedSum });
@@ -226,7 +246,7 @@ export default function ThisMonthHistory() {
   };
 
   const dataToDisplay = useMemo(() => {
-    let filteredData = [];
+    let filteredData: Log[] = [];
 
     if (type === 'Sell' && expenseData) {
       filteredData = [...expenseData];
@@ -238,10 +258,13 @@ export default function ThisMonthHistory() {
     if (filter === 'Date') {
       // Sort by date
       filteredData = filteredData.sort((a, b) => {
+        const dateA = new Date(a.date.seconds * 1000).getTime();
+        const dateB = new Date(b.date.seconds * 1000).getTime();
+
         if (order === 'asc') {
-          return new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000);
+          return dateA - dateB;
         }
-        return new Date(b.date.seconds * 1000) - new Date(a.date.seconds * 1000);
+        return dateB - dateA;
       });
     } else if (filter === 'Amount') {
       // Sort by amount
@@ -278,8 +301,8 @@ export default function ThisMonthHistory() {
   };
 
   useEffect(() => {
-    if (selectedLog !== null) {
-      confirmDeleteLog(selectedLog);
+    if (selectedLog) {
+      confirmDeleteLog();
     }
   }, [selectedLog]);
 

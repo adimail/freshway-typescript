@@ -22,14 +22,22 @@ import { monthYear } from '../inventory/utils';
 import { updateSummary } from '../../utils/addstock';
 import { NetSummaryComponent } from '../inventory/summary';
 
+import {
+  SeedsInitialFormData,
+  FertilizersInitialFormData,
+  PesticidesInitialFormData,
+} from '../../types/inventory';
+
+type InventoryLog = SeedsInitialFormData | PesticidesInitialFormData | FertilizersInitialFormData;
+
 const ThisMonthInventoryHistory = () => {
   const { userData } = useContext(UserDataContext)!;
 
   const isDark = true;
 
-  const [selectedLog, setSelectedLog] = useState(null);
+  const [selectedLog, setSelectedLog] = useState<InventoryLog | null>(null);
   const [type, setType] = useState('All');
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<InventoryLog[] | null>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -83,7 +91,7 @@ const ThisMonthInventoryHistory = () => {
     }
   };
 
-  const onSelectSwitch = (value) => {
+  const onSelectSwitch = (value: string) => {
     setType(value);
   };
 
@@ -104,84 +112,82 @@ const ThisMonthInventoryHistory = () => {
   }, [type, data]);
 
   const deleteLog = async () => {
-    try {
-      const batch = writeBatch(firestore);
+    if (selectedLog) {
+      try {
+        const batch = writeBatch(firestore);
 
-      // Delete transaction directly without fetching it
-      const transactionRef = doc(
-        firestore,
-        `inventory-${userData.id}/${monthYear}/${selectedLog.category}`,
-        selectedLog.id
-      );
+        // Delete transaction directly without fetching it
+        const transactionRef = doc(
+          firestore,
+          `inventory-${userData.id}/${monthYear}/${selectedLog.category}`,
+          selectedLog.id
+        );
 
-      batch.delete(transactionRef);
+        batch.delete(transactionRef);
 
-      // Update summary by subtracting the amount of the deleted log
-      const summaryRef = doc(
-        firestore,
-        `summaries-${userData.id}`,
-        'inventory',
-        monthYear,
-        selectedLog.category.toLowerCase()
-      );
+        // Update summary by subtracting the amount of the deleted log
+        const summaryRef = doc(
+          firestore,
+          `summaries-${userData.id}`,
+          'inventory',
+          monthYear,
+          selectedLog.category.toLowerCase()
+        );
 
-      const netSummaryRef = doc(
-        firestore,
-        `summaries-${userData.id}`,
-        'inventory',
-        monthYear,
-        'net'
-      );
+        const netSummaryRef = doc(
+          firestore,
+          `summaries-${userData.id}`,
+          'inventory',
+          monthYear,
+          'net'
+        );
 
-      const docSnapshot = await getDoc(summaryRef);
-      await updateSummary({
-        docSnapshot,
-        formData: selectedLog,
-        summaryRef,
-        remove: true,
-      });
-
-      const netDocSnapshot = await getDoc(netSummaryRef);
-      await updateSummary({
-        docSnapshot: netDocSnapshot,
-        formData: selectedLog,
-        summaryRef: netSummaryRef,
-        remove: true,
-      });
-
-      await batch.commit().then(() => {
-        showToast({
-          title: 'Log Deleted',
-          body: 'Data refreshed',
+        const docSnapshot = await getDoc(summaryRef);
+        await updateSummary({
+          docSnapshot,
+          formData: selectedLog,
+          summaryRef,
+          remove: true,
         });
-        setRefreshTrigger((prev) => prev + 1);
-      });
-    } catch (error) {
-      console.error('Error deleting log:', error);
-    }
-  };
 
-  const confirmDeleteLog = () => {
-    Alert.alert(
-      'Confirm Deletion',
-      'Are you sure you want to delete this log?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: deleteLog,
-        },
-      ],
-      { cancelable: false }
-    );
+        const netDocSnapshot = await getDoc(netSummaryRef);
+        await updateSummary({
+          docSnapshot: netDocSnapshot,
+          formData: selectedLog,
+          summaryRef: netSummaryRef,
+          remove: true,
+        });
+
+        await batch.commit().then(() => {
+          showToast({
+            title: 'Log Deleted',
+            body: 'Data refreshed',
+          });
+          setRefreshTrigger((prev) => prev + 1);
+        });
+      } catch (error) {
+        console.error('Error deleting log:', error);
+      }
+    }
   };
 
   useEffect(() => {
     if (selectedLog !== null) {
-      confirmDeleteLog(selectedLog);
+      Alert.alert(
+        'Confirm Deletion',
+        'Are you sure you want to delete this log?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: deleteLog,
+          },
+        ],
+        { cancelable: false }
+      );
     }
   }, [selectedLog]);
 
@@ -207,17 +213,15 @@ const ThisMonthInventoryHistory = () => {
             borderRadius={100}
           />
         </View>
-        <View style={styles.content}>
-          <View style={{ width: '100%', alignItems: 'center' }}>
-            <View
-              style={[
-                styles.separator,
-                {
-                  backgroundColor: isDark ? 'white' : 'black',
-                },
-              ]}
-            />
-          </View>
+        <View style={{ width: '100%', alignItems: 'center' }}>
+          <View
+            style={[
+              styles.separator,
+              {
+                backgroundColor: isDark ? 'white' : 'black',
+              },
+            ]}
+          />
         </View>
         {isLoading ? (
           <Text style={[styles.title, { color: isDark ? 'white' : 'black' }]}>

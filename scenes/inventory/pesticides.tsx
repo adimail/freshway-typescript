@@ -24,20 +24,18 @@ import { useStyles } from './styles';
 import { useSummaryData } from './useSummaryData';
 import CustomSwitch from '../../components/toggleSwitch';
 import { PesticidesSummary } from './summary';
+import { PesticidesInitialFormData } from '../../types/inventory';
 
 export default function PesticidesView() {
   const { userData } = useContext(UserDataContext)!;
+  const styles = useStyles();
 
-  const isDark = true;
-  const styles = useStyles(isDark);
-
-  const [refreshing, setRefreshing] = useState(false);
-  const [formData, setFormData] = useState(pesticidesinitialFormData);
-  // eslint-disable-next-line no-unused-vars
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showManufacturingDatePicker, setShowManufacturingDatePicker] = useState(false);
-  const [showExpiryDatePicker, setShowExpiryDatePicker] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [formData, setFormData] = useState<PesticidesInitialFormData>(pesticidesinitialFormData);
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [showManufacturingDatePicker, setShowManufacturingDatePicker] = useState<boolean>(false);
+  const [showExpiryDatePicker, setShowExpiryDatePicker] = useState<boolean>(false);
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
   const monthYear = new Date().toLocaleDateString('en-GB', {
     month: 'short',
@@ -48,7 +46,13 @@ export default function PesticidesView() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    setFormData(pesticidesinitialFormData);
+    setFormData({
+      ...pesticidesinitialFormData,
+      type: formData.type,
+      state: formData.state,
+      name: formData.name,
+      company: formData.company,
+    });
     setRefreshTrigger((prev) => prev + 1);
 
     setTimeout(() => {
@@ -56,7 +60,7 @@ export default function PesticidesView() {
     }, 200);
   };
 
-  const handleDateChange = (selectedDate, key) => {
+  const handleDateChange = (selectedDate: Date | undefined, key: string) => {
     if (selectedDate) {
       setFormData({ ...formData, [key]: selectedDate });
       if (key === 'date') {
@@ -75,7 +79,7 @@ export default function PesticidesView() {
     }
   };
 
-  const renderDatePicker = (value, key) => {
+  const renderDatePicker = (value: Date, key: string) => {
     if (Platform.OS === 'ios') {
       return (
         <DateTimePicker
@@ -98,11 +102,11 @@ export default function PesticidesView() {
     ) : null;
   };
 
-  const handleInputChange = (key, value) => {
+  const handleInputChange = (key: string, value: string) => {
     setFormData({ ...formData, [key]: value });
   };
 
-  const recalculate = (data) => {
+  const recalculate = (data: PesticidesInitialFormData): PesticidesInitialFormData => {
     const purchasePrice = parseFloat(data.purchasePrice) || 0;
     const quantity = parseFloat(data.quantity) || 0;
     const sellingPrice = parseFloat(data.sellingPrice) || 0;
@@ -124,7 +128,7 @@ export default function PesticidesView() {
     };
   };
 
-  const handlePriceChange = (key, value) => {
+  const handlePriceChange = (key: string, value: string) => {
     const updatedData = { ...formData, [key]: value };
     setFormData(recalculate(updatedData));
   };
@@ -148,9 +152,8 @@ export default function PesticidesView() {
         showToast({
           title: `${formData.name} Stock added `,
           body: `Total Cost ${formData.totalCost}`,
-          isDark,
         });
-        setRefreshTrigger((prev) => prev + 1); // Trigger summary data refresh
+        setRefreshTrigger((prev) => prev + 1);
       })
       .catch((error) => {
         console.error('Error adding document: ', error);
@@ -212,7 +215,7 @@ export default function PesticidesView() {
               <CustomSwitch
                 roundCorner
                 options={['Fungicide', 'Insecticide', 'Weedicide']}
-                onSelectSwitch={(value) => {
+                onSelectSwitch={(value: string) => {
                   handleInputChange('type', value);
                 }}
                 height={46}
@@ -222,14 +225,14 @@ export default function PesticidesView() {
               <SelectField
                 label="Pesticide name"
                 selectedValue={formData.name}
-                onValueChange={(value) => handleInputChange('name', value)}
+                onValueChange={(value: string) => handleInputChange('name', value)}
                 data={pesticidesData.name || ['Default']}
               />
 
               <SelectField
                 label="Company"
                 selectedValue={formData.company}
-                onValueChange={(value) => handleInputChange('company', value)}
+                onValueChange={(value: string) => handleInputChange('company', value)}
                 data={pesticidesData.company || ['Default']}
               />
 
@@ -285,12 +288,13 @@ export default function PesticidesView() {
                 <View style={styles.inlineInput}>
                   <CustomSwitch
                     roundCorner
-                    options={['Kg', 'ml']}
-                    onSelectSwitch={(value) => {
+                    options={['ml', 'Kg']}
+                    onSelectSwitch={(value: string) => {
                       handleInputChange('state', value);
                     }}
                     height={46}
                     selectionColor="#1C2833"
+                    borderRadius={100}
                   />
                 </View>
               </View>
@@ -352,8 +356,6 @@ export default function PesticidesView() {
               </Text>
             </Section>
 
-            <View style={[styles.separator]} />
-
             <View
               style={{
                 display: 'flex',
@@ -364,11 +366,11 @@ export default function PesticidesView() {
                 paddingHorizontal: 20,
               }}>
               <View style={{ width: '40%' }}>
-                <Text style={styles.datePickerButton}>Manufacturing Date</Text>
+                <Text>Manufacturing Date</Text>
                 <TouchableOpacity
                   onPress={() => setShowManufacturingDatePicker(true)}
                   style={styles.dateButton}>
-                  <Text style={styles.datePickerText}>
+                  <Text>
                     {formData.manufacturingDate.toLocaleDateString('en-GB', {
                       month: 'short',
                       year: 'numeric',
@@ -380,11 +382,11 @@ export default function PesticidesView() {
               </View>
 
               <View style={{ width: '40%' }}>
-                <Text style={styles.title}>Expiry Date</Text>
+                <Text>Expiry Date</Text>
                 <TouchableOpacity
                   onPress={() => setShowExpiryDatePicker(true)}
                   style={styles.dateButton}>
-                  <Text style={styles.title}>
+                  <Text>
                     {formData.expiryDate.toLocaleDateString('en-GB', {
                       month: 'short',
                       year: 'numeric',
@@ -396,7 +398,6 @@ export default function PesticidesView() {
             </View>
           </View>
         </View>
-        {/* Order summary */}
         <PesticidesSummary formData={formData} />
       </ScrollView>
 

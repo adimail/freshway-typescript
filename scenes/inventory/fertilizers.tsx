@@ -25,20 +25,18 @@ import { UserDataContext } from '../../context/UserDataContext';
 import { colors } from '../../theme';
 import { showToast } from '../../utils/ShowToast';
 import { AddStock } from '../../utils/addstock';
+import { FertilizersInitialFormData } from '../../types/inventory';
 
 export default function FertilizersView() {
   const { userData } = useContext(UserDataContext)!;
+  const styles = useStyles();
 
-  const isDark = true;
-  const styles = useStyles(isDark);
-
-  const [refreshing, setRefreshing] = useState(false);
-  const [formData, setFormData] = useState(fertilizersinitialFormData);
-  // eslint-disable-next-line no-unused-vars
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showManufacturingDatePicker, setShowManufacturingDatePicker] = useState(false);
-  const [showExpiryDatePicker, setShowExpiryDatePicker] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FertilizersInitialFormData>(fertilizersinitialFormData);
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [showManufacturingDatePicker, setShowManufacturingDatePicker] = useState<boolean>(false);
+  const [showExpiryDatePicker, setShowExpiryDatePicker] = useState<boolean>(false);
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
   const monthYear = new Date().toLocaleDateString('en-GB', {
     month: 'short',
@@ -49,7 +47,13 @@ export default function FertilizersView() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    setFormData(fertilizersinitialFormData);
+    setFormData({
+      ...fertilizersinitialFormData,
+      type: formData.type,
+      state: formData.state,
+      name: formData.name,
+      company: formData.company,
+    });
     setRefreshTrigger((prev) => prev + 1);
 
     setTimeout(() => {
@@ -57,7 +61,7 @@ export default function FertilizersView() {
     }, 200);
   };
 
-  const handleDateChange = (selectedDate, key) => {
+  const handleDateChange = (selectedDate: Date | undefined, key: string) => {
     if (selectedDate) {
       setFormData({ ...formData, [key]: selectedDate });
       if (key === 'date') {
@@ -76,14 +80,14 @@ export default function FertilizersView() {
     }
   };
 
-  const renderDatePicker = (value, key) => {
+  const renderDatePicker = (value: Date, key: string) => {
     if (Platform.OS === 'ios') {
       return (
         <DateTimePicker
           value={value}
           mode="date"
           display="spinner"
-          onChange={(selectedDate) => handleDateChange(selectedDate || value, key)}
+          onChange={(event, selectedDate) => handleDateChange(selectedDate || value, key)}
         />
       );
     }
@@ -94,16 +98,16 @@ export default function FertilizersView() {
         value={value}
         mode="date"
         display="default"
-        onChange={(selectedDate) => handleDateChange(selectedDate || value, key)}
+        onChange={(event, selectedDate) => handleDateChange(selectedDate || value, key)}
       />
     ) : null;
   };
 
-  const handleInputChange = (key, value) => {
+  const handleInputChange = (key: string, value: string) => {
     setFormData({ ...formData, [key]: value });
   };
 
-  const recalculate = (data) => {
+  const recalculate = (data: FertilizersInitialFormData): FertilizersInitialFormData => {
     const purchasePrice = parseFloat(data.purchasePrice) || 0;
     const quantity = parseFloat(data.quantity) || 0;
     const sellingPrice = parseFloat(data.sellingPrice) || 0;
@@ -125,7 +129,7 @@ export default function FertilizersView() {
     };
   };
 
-  const handlePriceChange = (key, value) => {
+  const handlePriceChange = (key: string, value: string) => {
     const updatedData = { ...formData, [key]: value };
     setFormData(recalculate(updatedData));
   };
@@ -149,7 +153,7 @@ export default function FertilizersView() {
           title: `${formData.name} Stock added `,
           body: `Total Cost ${formData.totalCost}`,
         });
-        setRefreshTrigger((prev) => prev + 1); // Trigger summary data refresh
+        setRefreshTrigger((prev) => prev + 1);
       })
       .catch((error) => {
         console.error('Error adding document: ', error);
@@ -216,6 +220,7 @@ export default function FertilizersView() {
                 }}
                 height={46}
                 selectionColor={colors.darkPurple}
+                borderRadius={100}
               />
               <SelectField
                 label="Fertilizer name"
@@ -265,7 +270,7 @@ export default function FertilizersView() {
                 <View style={styles.inlineInput}>
                   <CustomSwitch
                     roundCorner
-                    options={['Kg', 'ml']}
+                    options={['ml', 'Kg']}
                     onSelectSwitch={(value: string) => {
                       handleInputChange('state', value);
                     }}
@@ -345,11 +350,11 @@ export default function FertilizersView() {
                 paddingHorizontal: 20,
               }}>
               <View style={{ width: '40%' }}>
-                <Text style={styles.datePickerButton}>Manufacturing Date</Text>
+                <Text>Manufacturing Date</Text>
                 <TouchableOpacity
                   onPress={() => setShowManufacturingDatePicker(true)}
                   style={styles.dateButton}>
-                  <Text style={styles.datePickerText}>
+                  <Text>
                     {formData.manufacturingDate.toLocaleDateString('en-GB', {
                       month: 'short',
                       year: 'numeric',
@@ -361,11 +366,11 @@ export default function FertilizersView() {
               </View>
 
               <View style={{ width: '40%' }}>
-                <Text style={styles.title}>Expiry Date</Text>
+                <Text>Expiry Date</Text>
                 <TouchableOpacity
                   onPress={() => setShowExpiryDatePicker(true)}
                   style={styles.dateButton}>
-                  <Text style={styles.title}>
+                  <Text>
                     {formData.expiryDate.toLocaleDateString('en-GB', {
                       month: 'short',
                       year: 'numeric',

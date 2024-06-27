@@ -33,6 +33,7 @@ export const seedsinitialFormData = {
   manufacturingDate: new Date(),
   expiryDate: new Date(),
   date: new Date(),
+  category: 'seeds',
 };
 
 export const fertilizersinitialFormData = {
@@ -49,6 +50,7 @@ export const fertilizersinitialFormData = {
   manufacturingDate: new Date(),
   expiryDate: new Date(),
   date: new Date(),
+  category: 'fertilizers',
 };
 
 export const pesticidesinitialFormData = {
@@ -57,7 +59,7 @@ export const pesticidesinitialFormData = {
   company: '',
   packingSize: '',
   batchNumber: '',
-  state: 'Kg',
+  state: 'ml',
   purchasePrice: '',
   quantity: '',
   sellingPrice: '',
@@ -66,11 +68,11 @@ export const pesticidesinitialFormData = {
   manufacturingDate: new Date(),
   expiryDate: new Date(),
   date: new Date(),
+  category: 'pesticides',
 };
 
 export const SummaryRow = ({ label, value }) => {
-  const isDark = true;
-  const styles = useStyles(isDark);
+  const styles = useStyles();
 
   return (
     <View style={styles.summaryRow}>

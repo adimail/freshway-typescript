@@ -1,6 +1,8 @@
 interface FormBase {
-  name: string;
+  id?: string;
+  name?: string;
   company: string;
+  category: string;
   packingSize: string;
   purchasePrice: string;
   quantity: string;
