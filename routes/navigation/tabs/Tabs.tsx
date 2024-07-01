@@ -11,6 +11,8 @@ import {
   InventoryHistoryNavigator,
 } from '../stacks';
 
+import { InventoryNavigatorTabs } from '../toptabs/InventoryNavigatorTabs';
+
 const Tab = createBottomTabNavigator();
 
 const TabNavigator: React.FC = () => {
@@ -29,7 +31,7 @@ const TabNavigator: React.FC = () => {
     },
     {
       name: 'InventoryTab',
-      component: InventoryNavigator,
+      component: InventoryNavigatorTabs,
       label: 'Add New Stock',
       iconName: 'people-carry',
     },

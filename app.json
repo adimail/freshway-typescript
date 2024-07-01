@@ -22,6 +22,9 @@
       },
       "package": "com.ceprince.freshway"
     },
+    "androidNavigationBar": {
+      "visible": "immersive"
+    },
     "extra": {
       "eas": {
         "projectId": "bf9a64d1-0c61-46f6-9675-8b79ab5c14f8"
