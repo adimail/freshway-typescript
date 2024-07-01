@@ -4,16 +4,9 @@ Cross paltform application to manage store inventory of our family shop, **_Fres
 
 ### Screenshots (android)
 
-<div style="display: flex; justify-content: space-around;">
-  <img src="assets/ss/2.jpeg" alt="Application" style="max-width: 30%; margin: 15px;">
-  <img src="assets/ss/5.jpeg" alt="Application" style="max-width: 30%; margin: 15px;">
-  <img src="assets/ss/6.jpeg" alt="Application" style="max-width: 30%; margin: 15px;">
-</div>
-<div style="display: flex; justify-content: space-around;">
-  <img src="assets/ss/1.jpeg" alt="Android View" style="max-width: 30%; margin: 15px;">
-  <img src="assets/ss/4.jpeg" alt="Web View" style="max-width: 30%; margin: 15px;">
-  <img src="assets/ss/3.jpeg" alt="Application" style="max-width: 30%; margin: 15px;">
-</div>
+| ![Application](assets/ss/2.jpeg)  | ![Application](assets/ss/5.jpeg) | ![Application](assets/ss/6.jpeg) |
+| :-------------------------------: | :------------------------------: | :------------------------------: |
+| ![Android View](assets/ss/1.jpeg) |  ![Web View](assets/ss/4.jpeg)   | ![Application](assets/ss/3.jpeg) |
 
 ## Features
 
