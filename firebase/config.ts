@@ -6,7 +6,7 @@ import { getFirestore } from 'firebase/firestore';
 // cloud storage
 import { getStorage } from 'firebase/storage';
 
-import { firebaseKey } from '../firebase.config';
+import { firebaseKey } from '../firebase.keys';
 
 const firebaseConfig = {
   apiKey: firebaseKey.apiKey,

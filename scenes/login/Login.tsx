@@ -14,7 +14,7 @@ import { auth, firestore } from '../../firebase/config';
 
 // To ignore a useless warning in terminal.
 // https://stackoverflow.com/questions/44603362/setting-a-timer-for-a-long-period-of-time-i-e-multiple-minutes
-LogBox.ignoreLogs(['Setting a timer']);
+// LogBox.ignoreLogs(['Setting a timer']);
 
 export default function Login() {
   const [email, setEmail] = useState('');

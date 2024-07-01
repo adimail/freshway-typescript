@@ -18,7 +18,7 @@ export const RenderSummarySection = (title: string, content: React.ReactNode) =>
 };
 
 export const seedsinitialFormData = {
-  season: '',
+  season: 'Kharif',
   crop: '',
   variety: '',
   company: '',

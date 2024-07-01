@@ -7,14 +7,11 @@ import {
 } from '../toptabs/HistoryNavigatorTabs';
 
 const Stack = createStackNavigator();
-const RootStack = createStackNavigator();
 
 export const HistoryNavigator = () => {
   return (
     <Stack.Navigator>
-      <RootStack.Group>
-        <Stack.Screen name="History" component={HistoryNavigatorTabs} />
-      </RootStack.Group>
+      <Stack.Screen name="History" component={HistoryNavigatorTabs} />
     </Stack.Navigator>
   );
 };
@@ -22,9 +19,7 @@ export const HistoryNavigator = () => {
 export const InventoryHistoryNavigator = () => {
   return (
     <Stack.Navigator>
-      <RootStack.Group>
-        <Stack.Screen name="Inventory Overview" component={InventoryHistoryNavigatorTabs} />
-      </RootStack.Group>
+      <Stack.Screen name="Inventory Overview" component={InventoryHistoryNavigatorTabs} />
     </Stack.Navigator>
   );
 };

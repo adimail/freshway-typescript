@@ -53,26 +53,12 @@ const TabNavigator: React.FC = () => {
 
   return (
     <Tab.Navigator
-      options={{
-        tabBarStyle: {
-          backgroundColor: 'white',
-          borderTopColor: 'gray',
-          borderTopWidth: 1,
-          paddingBottom: 5,
-          paddingTop: 5,
-        },
-      }}
-      defaultScreenOptions={{
-        headerShown: false,
-        headerTransparent: true,
-      }}
       screenOptions={() => ({
         headerShown: false,
         tabBarActiveTintColor: colors.lightPurple,
         tabBarInactiveTintColor: colors.gray,
       })}
-      initialRouteName="HomeTab"
-      swipeEnabled={false}>
+      initialRouteName="HomeTab">
       {tabScreens.map((screen) => (
         <Tab.Screen
           key={screen.name}
